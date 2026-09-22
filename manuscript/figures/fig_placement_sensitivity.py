@@ -87,11 +87,11 @@ def figure_sensitivity() -> None:
                         & (frame.axis == axis) & np.isclose(frame.value, val)]
         return float(row.gap_pct.iloc[0])
 
-    fig = plt.figure(figsize=(TEXT_IN, TEXT_IN * 0.62))
+    fig = plt.figure(figsize=(TEXT_IN, TEXT_IN * 0.60))
     axes = []
     lefts = [0.145, 0.640]
-    bottoms = [0.650, 0.215]
-    width, height = 0.335, 0.270
+    bottoms = [0.665, 0.235]
+    width, height = 0.335, 0.295
     ypos = np.arange(len(ROWS))[::-1]
     bar_h = 0.34
     for k, key in enumerate(KEYS):
@@ -119,8 +119,7 @@ def figure_sensitivity() -> None:
         span = xmax * 1.30 + 0.4
         ax.set_xlim(-0.06 * span, span)
         ax.set_ylim(-0.6, len(ROWS) - 0.4)
-        ax.set_title(f"{LABEL[key]}: base $\\delta$ = {base:.2f}%", fontsize=9.5,
-                     loc="left", pad=3)
+        # no panel title: system, share and base delta are stated in the caption
         ax.grid(axis="y", visible=False)
         if k // 2 == 1:
             ax.set_xlabel("$\\delta$ (%)")
