@@ -36,6 +36,8 @@ RMS converter model on the IEEE 39-bus and RTS-24 systems.
       check_r2_numbers.py       headline numbers of the paper against results/
 
     manuscript/                 LaTeX sources (elsarticle), refs.bib, highlights
+      SEGAN_Manuscript_<date>.pdf, SEGAN_Supplementary_<date>.pdf
+                                compiled current version (one pair; replaced on each update)
       figures/                  figure PDFs and the scripts that draw them from study/results
 
     reproduce.py                runs the study in dependency order and checks the numbers

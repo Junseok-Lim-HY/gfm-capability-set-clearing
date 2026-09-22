@@ -11,4 +11,5 @@ venv/
 *.synctex.gz
 *.fdb_latexmk
 *.fls
-manuscript/*.pdf
+manuscript/main.pdf
+manuscript/supplementary.pdf
