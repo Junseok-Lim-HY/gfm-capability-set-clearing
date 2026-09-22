@@ -1,0 +1,5 @@
+case,share,closes_at_base,largest_that_closes,smallest_that_fails,residual_at_base
+rts24,0.2,False,0.2296875,0.24062499999999998,0.00015571833853582034
+rts24,0.4,False,0.15312499999999998,0.1640625,2.6329493773439218e-05
+ieee39,0.2,True,0.35,,0.0
+ieee39,0.4,True,0.35,,0.0

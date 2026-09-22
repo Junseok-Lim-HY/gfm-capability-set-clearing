@@ -1,0 +1,161 @@
+ieee39: peak demand 5894 MW, 46 constrained branches, 3 zones, tightest branch 480 MW
+   share 0.2: 3 converters (1779 MVA), 7 synchronous (6115 MVA)
+   share 0.4: 5 converters (3190 MVA), 5 synchronous (4704 MVA)
+rts24: peak demand 2724 MW, 38 constrained branches, 4 zones, tightest branch 175 MW
+   share 0.2: 19 converters (798 MVA), 13 synchronous (2961 MVA)
+   share 0.4: 25 converters (1671 MVA), 7 synchronous (2088 MVA)
+
+held at {'dispatch': 0.8, 'i_short': 1.5, 'reactive': 0.35, 'threshold': 0.2, 'priority': 'reactive', 'share': 0.4}
+
+1. inertia price against pre-disturbance dispatch
+
+form                       box  current    ratio
+case   share dispatch                           
+ieee39 0.2   0.4          3.00     3.00     1.00
+             0.6          3.00     3.00     1.00
+             0.8          8.00     3.00     2.67
+             1.0         41.00     3.00    13.67
+       0.4   0.4          3.00     3.00     1.00
+             0.6          3.00     3.00     1.00
+             0.8          8.00     3.00     2.67
+             1.0         41.00     3.00    13.67
+rts24  0.2   0.4          3.00     3.00     1.00
+             0.6          8.00     3.00     2.67
+             0.8          8.00     3.00     2.66
+             1.0         41.00     3.00    13.67
+       0.4   0.4          3.00     3.00     1.00
+             0.6          3.00     3.00     1.00
+             0.8          6.75     3.00     2.25
+             1.0         23.25     3.00     7.75
+
+2. curtailment the capability model forces, MWh over the day
+
+form                         box    current  box excess
+case   share dispatch                                  
+ieee39 0.2   0.4               0          0           0
+             0.6               0          0           0
+             0.8               0          0           0
+             1.0            7914        253        7661
+       0.4   0.4               0          0           0
+             0.6               0          0           0
+             0.8               0          0           0
+             1.0            9861       1164        8698
+rts24  0.2   0.4               0          0           0
+             0.6               0          0           0
+             0.8               0          0           0
+             1.0             929          0         929
+       0.4   0.4               0          0           0
+             0.6               0          0           0
+             0.8               0          0           0
+             1.0            5249       5114         135
+
+   and procurement cost
+
+form                         box    current    error %
+case   share dispatch                                 
+ieee39 0.2   0.4         4000215    4000215          0
+             0.6         3675659    3675659          0
+             0.8         3383433    3351103         -1
+             1.0         3362759    3059622        -10
+       0.4   0.4         3620376    3620376          0
+             0.6         3015491    3015491         -0
+             0.8         2441304    2433092         -0
+             1.0         2261451    1924860        -17
+rts24  0.2   0.4         1667179    1667179          0
+             0.6         1573834    1571137         -0
+             0.8         1495570    1485463         -1
+             1.0         1441431    1424610         -1
+       0.4   0.4         1194001    1194001          0
+             0.6          995587     995587         -0
+             0.8          867645     858232         -1
+             1.0          821770     805955         -2
+
+   and the same at full injection over the cost-optimal face,
+   which is what says whether those figures are results
+
+  case     share    box_lo    box_hi    set_lo    set_hi  guaranteed_excess  identified
+ieee39       0.2    7550.7    7914.5     221.8     253.2             7297.4        True
+ieee39       0.4    8406.3    9861.5     657.8    1163.8             7242.6        True
+ rts24       0.2       0.0     929.4       0.0       0.0               -0.0       False
+ rts24       0.4     216.1    5248.6     205.6    5113.7            -4897.6       False
+
+3. the overload term alone. The box cannot see I_s and so is flat
+   in it; the circle is not. The two do not coincide at I_s = 1.0,
+   because voltage and reactive current are still in play - for
+   the case where they must coincide see test_reduction.py
+
+form                           box  current    ratio
+case   share i_short_term                           
+ieee39 0.2   1.0              8.00     8.00     1.00
+             1.2              8.00     3.00     2.67
+             1.5              8.00     3.00     2.67
+       0.4   1.0              8.00     8.00     1.00
+             1.2              8.00     3.00     2.67
+             1.5              8.00     3.00     2.67
+rts24  0.2   1.0              8.00     8.00     1.00
+             1.2              8.00     3.01     2.66
+             1.5              8.00     3.00     2.66
+       0.4   1.0              6.75     6.75     1.00
+             1.2              6.75     3.00     2.25
+             1.5              6.75     3.00     2.25
+
+4. the other sign: at I_s = 1.0 with reserve scarce, reactive duty
+   makes the box optimistic (positive means the box understates)
+
+form                              box    current    error %
+case   share reactive_frac                                 
+ieee39 0.2   0.35             3479583    3473458         -0
+             0.50             3479602    3474543         -0
+             0.65             3479621    3477103         -0
+       0.4   0.35             2538297    2539433          0
+             0.50             2538336    2544058          0
+             0.65             2538375    2552429          1
+rts24  0.2   0.35             1539825    1536926         -0
+             0.50             1539834    1537383         -0
+             0.65             1539842    1538403         -0
+       0.4   0.35              922059     907483         -2
+             0.50              922076     911409         -1
+             0.65              922093     920072         -0
+
+   past that range the box clears where the capability set cannot:
+
+form                    box  current
+case   share reactive               
+ieee39 0.4   0.8       True    False
+             1.0       True    False
+
+5. the state-of-charge gate, current-based model only
+
+soc_threshold      0.0      0.1      0.2      0.3
+case   share                                     
+ieee39 0.2       1.000    0.770    0.646    0.621
+       0.4       1.000    0.611    0.554    0.512
+rts24  0.2       1.000    0.551    0.407    0.346
+       0.4       1.000    0.534    0.439    0.422
+
+6. what the network adds, one constraint at a time
+
+rung                  single bus, global Q  dc branches, global Q  dc branches, zonal Q
+case   share form                                                                      
+ieee39 0.2   box                   3383481                3383481               3383433
+             current               3351151                3351151               3351103
+       0.4   box                   2441304                2441304               2441304
+             current               2433092                2433092               2433092
+rts24  0.2   box                   1495589                1495589               1495570
+             current               1486778                1486778               1485463
+       0.4   box                    859135                 867645                867645
+             current                848195                 858232                858232
+
+7. voltage fixed point: clear, re-solve the ac network, re-clear
+
+   case  share     form   conv  rounds  cost first  cost last  move %  inertia       V range
+ ieee39    0.2      box   True       7     3383433    3383433   +0.00  8.00-> 8.00  1.007-1.061
+ ieee39    0.2  current   True      12     3351103    3351103   +0.00  3.00-> 3.00  1.002-1.064
+ ieee39    0.4      box   True       7     2441304    2441304   +0.00  8.00-> 8.00  0.947-1.062
+ ieee39    0.4  current   True      12     2433092    2433092   +0.00  3.00-> 3.00  0.944-1.064
+  rts24    0.2      box   True       6     1495570    1495570   +0.00  8.00-> 8.00  1.016-1.065
+  rts24    0.2  current   True      11     1485463    1485207   -0.02  3.00-> 3.00  1.014-1.080
+  rts24    0.4      box   True       7      867645     867645   +0.00  6.75-> 6.75  0.982-1.064
+  rts24    0.4  current   True      24      858232     858232   +0.00  3.00-> 3.00  0.981-1.073
+
+wrote C:\Users\junse\PycharmProjects\SEGAN_GFM\study\results\case_study.csv (120 rows, 0 infeasible) and C:\Users\junse\PycharmProjects\SEGAN_GFM\study\results\voltage_fixed_point.csv

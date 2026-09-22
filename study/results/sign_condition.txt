@@ -1,0 +1,24 @@
+1. the piecewise sign rule against the exact circle
+   1884 probes over voltage, short-term rating, band availability, active-power bound and reactive dispatch
+   sign called correctly at 1884 of 1884
+
+   the region the earlier threshold got wrong, L < Pbar:
+     V=0.90 Is=1.00 a=0.0 Pbar=100: L= 90.00, Q=0, difference  -10.00 -> optimistic
+     V=0.90 Is=1.00 a=0.5 Pbar=100: L= 90.00, Q=0, difference  -10.00 -> optimistic
+     V=0.90 Is=1.00 a=1.0 Pbar=100: L= 90.00, Q=0, difference  -10.00 -> optimistic
+     V=0.90 Is=1.10 a=0.0 Pbar=100: L= 90.00, Q=0, difference  -10.00 -> optimistic
+
+2. the inscribed polygon against the circle, by solving its faces
+ sides     radius  worst_shortfall  worst_shortfall_pct  radial_bound_pct
+     8    92.3880          10.7580              10.7580            7.6120
+    12    96.5926           6.7174               6.7174            3.4074
+    24    99.1445           2.7049               2.7049            0.8555
+    48    99.7859           0.3418               0.3418            0.2141
+    96    99.9465           0.1520               0.1520            0.0535
+   192    99.9866           0.0270               0.0270            0.0134
+
+   worst shortfall is measured over reactive dispatches from 0 to
+   0.95 pu, so it is the largest error the clearing can meet, not
+   the radial error on the axis.
+
+PASS

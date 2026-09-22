@@ -1,0 +1,526 @@
+% Sections 1--3 of the revised manuscript (r2, six-section structure:
+% 1 Introduction, 2 Capability set and sign condition, 3 Market clearing
+% formulation, 4 Case study, 5 Results, 6 Conclusion). Numbers that depend on the
+% regenerated results are marked \todo{...} and filled from study/results.
+
+\section{Introduction}
+\label{sec:intro}
+
+As synchronous generation is displaced, inertia and fast reserve have to be
+procured explicitly, and increasingly from converter-interfaced
+resources~\cite{ulbig2014inertia,tielens2016inertia,milano2018lowinertia}.
+Grid-forming (GFM) control, in which the converter behaves as a voltage source
+behind an impedance, is the main technical
+response~\cite{zhong2011synchronverter,rocabert2012control,dorfler2023control},
+and system operators now specify GFM capability rather than encourage
+it~\cite{matevosyan2019gfm,lin2020roadmap,entsoe2020gfm}. The energy a GFM
+converter sells, the reserve it holds and the inertial power it injects after
+a disturbance all pass through the same semiconductor bridge, so they are
+limited jointly, and the limit is a current~\cite{yazdani2010vsc}.
+
+Scheduling formulations have treated the frequency side of this problem in
+increasing detail. Governor rate limits entered the optimal power flow
+in~\cite{chavez2014governor}; inertia became a decision variable
+in~\cite{teng2016stochastic}; frequency services were
+co-optimised in~\cite{badesa2019simultaneous,trovato2019unit}; and
+requirement uncertainty and the siting of virtual inertia were addressed
+in~\cite{paturet2020stochastic,poolla2019placement}. On the supply side these
+models bound what a resource can offer by active power. Three recent
+formulations require converter inertia to be backed by unused
+headroom~\cite{park2026inertia,jiang2025frequency,beigifard2026frequency},
+and a fourth embeds a learned frequency surrogate in the day-ahead
+schedule~\cite{jiang2026learning}. They differ in most respects, but in each
+the converter capability has the form
+%
+\begin{equation}
+  P_i + R_i + H_i \;\le\; \bar{P}_i ,
+  \label{eq:box}
+\end{equation}
+%
+with $P_i$ the energy schedule, $R_i$ the reserve and $H_i$ the inertial
+power. None contains a current limit, a reactive-power term or the terminal
+voltage (Table~\ref{tab:related}).
+
+System operators describe the capability differently. AEMO specifies overload
+capability as a level with a duration, for example \SI{150}{\percent} of rated
+current for \SI{2}{\second}, and reports that the active headroom of an
+inverter depends on its pre-disturbance operating
+point~\cite{aemo2023gfm,aemo2024inertia}; MISO's draft specification addresses
+operation at short-duration current limits~\cite{miso2024gfm}. At device and
+feeder level the interaction between reactive support and active reserve
+through the apparent-power limit is
+established~\cite{energies2020reserve}, and current-based inverter limits
+have been used in photovoltaic--storage scheduling and in batteries providing
+frequency and voltage control
+together~\cite{polat2025inverter,zecchino2021concurrent}. The remaining gap is
+a market clearing in which the current limit is shared between energy, reserve
+and inertia, the requirement multipliers are prices, and the effect of the
+representation is quantified.
+
+\begin{table*}[t]
+  \caption{Scheduling formulations with shared converter capability and what
+  each represents ($\yes$ present, $\no$ absent, --- not applicable). Entries
+  follow the constraint sets stated in each paper.}
+  \label{tab:related}
+  \centering
+  \footnotesize
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l l c c c c c c c l@{}}
+    \toprule
+    & & Shared & Current & Reactive & Terminal & Short-term
+    & Storage & Prices & Frequency \\
+    Reference & Test system & capability & limit & power & voltage
+    & $\neq$ continuous & state & as duals & model \\
+    \midrule
+    Park et al.~\cite{park2026inertia} & IEEE 30
+      & \yes & \no & \no & \no & \no & \yes & \yes & --- \\
+    Jiang and Li~\cite{jiang2025frequency} & WSCC 9, IEEE 39
+      & \yes & \no & \no & \no & \no & \no & \no & EMT surrogate \\
+    Jiang and Li~\cite{jiang2026learning} & IEEE 9
+      & \yes & \no & \no & \no & \no & \yes & \no & EMT surrogate \\
+    Beigi Fard et al.~\cite{beigifard2026frequency} & IEEE 9, 118
+      & \yes & \no & \no & \no & \no & \yes & \no & PWL nadir \\
+    Garozzo and Tina~\cite{energies2020reserve} & inverter, LV feeder
+      & --- & \yes & \yes & \no & \no & \yes & --- & --- \\
+    \addlinespace
+    This work & IEEE 39, RTS-24
+      & \yes & \yes & \yes & \yes & \yes & \yes & \yes & RMS check \\
+    \bottomrule
+  \end{tabular*}
+\end{table*}
+
+The physical limit on a converter is
+%
+\begin{equation}
+  \sqrt{P^2 + Q^2} \;\le\; V I_{\max} S ,
+  \label{eq:disc}
+\end{equation}
+%
+a disc in the $P$--$Q$ plane whose radius scales with the terminal voltage
+$V$. Equation~\eqref{eq:box} is the projection of Eq.~\eqref{eq:disc} onto
+$Q = 0$ at $V = \SI{1.0}{\pu}$ with $I_{\max}$ fixed at the continuous rating.
+It therefore omits the short-term current rating, which understates the
+capability available for an inertial response; omits reactive current, which
+overstates capability whenever $Q \neq 0$; and fixes the voltage, which
+overstates capability below \SI{1.0}{\pu} and understates it above. The three
+errors do not have the same sign, so a constant derating of
+Eq.~\eqref{eq:box} cannot remove them together.
+
+The contributions of this paper are as follows.
+\begin{enumerate}
+  \item The continuous and short-term current ratings, reactive current and
+        terminal voltage of a GFM converter are represented as a polyhedral
+        capability set and integrated in a multi-period joint clearing of
+        energy, reserve and inertia with marginal pricing. The clearing
+        remains a linear programme, so the prices are dual variables.
+  \item A piecewise condition is derived for the sign of the error made by
+        the active-power bound of Eq.~\eqref{eq:box}. The condition depends
+        on the short-term radius, the bound and the reactive current held
+        during the response, and not on the sustained active power.
+  \item The formulation is evaluated on the IEEE 39-bus and RTS-24 systems
+        against three comparison models and an exact second-order cone
+        benchmark, under alternative converter rating conventions and
+        randomised converter placements. The final schedules are validated
+        by ac power flow against voltage, generator reactive, branch and
+        balance limits; the procured response is constrained to be
+        deliverable after the largest generator outages; and the scheduled
+        inertial power is checked against a current-limited RMS converter
+        model.
+\end{enumerate}
+
+Fig.~\ref{fig:overview} summarises the approach. The formulation extends the
+shared-capability clearing of~\cite{park2026inertia}, whose treatment of
+inertia as a priced power service and of storage energy recovery is retained;
+what changes is the shape of the set the services share.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig1_overview}
+  \caption{Overview: physical current limit, polyhedral capability set,
+  multi-period clearing with network and ac validation, and procurement
+  outcomes.}
+  \label{fig:overview}
+\end{figure*}
+
+\section{Capability set and sign condition}
+\label{sec:capability}
+
+\subsection{Continuous and short-term limits}
+
+Converter $i$ has apparent-power rating $S_i$, terminal voltage $V_i$ (pu),
+continuous current limit $I^{\mathrm{c}}$ and short-term current limit
+$I^{\mathrm{s}} \ge I^{\mathrm{c}}$ (pu of rated current). Reserve that is
+called must be sustained for the containment period, whereas the inertial
+response lasts of the order of a second. Two constraints follow:
+%
+\begin{align}
+  \sqrt{(P_i + R_i)^2 + Q_i^2} &\;\le\; V_i I^{\mathrm{c}} S_i ,
+  \label{eq:cont} \\
+  \sqrt{(P_i + \chi R_i + H_i)^2 + \tilde{Q}_i^2}
+    &\;\le\; V^{\mathrm{sh}}_i \big[ I^{\mathrm{c}}
+      + a_i (I^{\mathrm{s}} - I^{\mathrm{c}}) \big] S_i .
+  \label{eq:short}
+\end{align}
+%
+Equation~\eqref{eq:cont} applies the continuous (thermal) rating to the
+sustained schedule. It is imposed at both ends of the reserve activation,
+$(P_i, Q_i)$ and $(P_i + R_i, Q_i)$, because a charging converter
+($P_i < 0$) carries its largest current before its reserve is called; the set
+is convex, so the intermediate points are covered.
+Equation~\eqref{eq:short} applies the short-term rating at the instant of the
+inertial response. The factor $\chi \in [0,1]$ is the fraction of the reserve
+already activated at that instant and is set to one, the simultaneous
+envelope. $V^{\mathrm{sh}}_i$ is the terminal voltage during the event; it
+equals $V_i$ unless the correction of Section~\ref{sec:applied} is applied.
+The band availability $a_i \in [0,1]$ is defined below.
+Fig.~\ref{fig:capability} compares the two constraints with
+Eq.~\eqref{eq:box}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig2_capability}
+  \caption{Capability set and active-power bound at
+  $I^{\mathrm{c}} = \SI{1.0}{\pu}$, $I^{\mathrm{s}} = \SI{1.5}{\pu}$.}
+  \label{fig:capability}
+\end{figure}
+
+\subsection{Reactive current priority}
+
+During a short-term excursion the current-priority setting of the converter
+determines how much reactive current is
+retained~\cite{qoria2020current,bottrell2014comparison}. The setting is a
+property of the converter, so it enters as a parameter:
+%
+\begin{equation}
+  \tilde{Q}_i = \alpha_i Q_i , \qquad \alpha_i \in [0,1] ,
+  \label{eq:priority}
+\end{equation}
+%
+with $\alpha_i = 1$ for reactive priority and $\alpha_i = 0$ for ideal active
+priority. Writing the relation as a bound $0 \le \tilde{Q}_i \le Q_i$ would
+let the optimisation choose the converter's current allocation.
+
+\subsection{Storage state of charge}
+
+A store limits the services in two ways. The short-term band is available
+only above an energy floor $\underline{\sigma}^{\mathrm{e}}$ and fully
+available above a breakpoint $\sigma^{\star}$,
+%
+\begin{equation}
+  0 \;\le\; a_i^t \;\le\; \min\!\left(1, \;
+    \frac{\min\!\left(\sigma_i^{t-1}, \sigma_i^{t}\right)
+      - \underline{\sigma}^{\mathrm{e}}}
+    {\sigma^{\star} - \underline{\sigma}^{\mathrm{e}}}\right) ,
+  \label{eq:gate}
+\end{equation}
+%
+and the energy behind the services must be held for their delivery windows
+$\tau^{\mathrm{R}}$ and $\tau^{\mathrm{H}}$,
+%
+\begin{equation}
+  \frac{\tau^{\mathrm{R}} R_i^t + \tau^{\mathrm{H}} H_i^t}{\eta_{\mathrm{d}}}
+    \;\le\; \Bigl( \min\!\left(\sigma_i^{t-1}, \sigma_i^{t}\right)
+      - \underline{\sigma}^{\mathrm{e}} \Bigr) E_i .
+  \label{eq:deliverability}
+\end{equation}
+%
+Both are evaluated at the two ends of the period and are linear in the state
+of charge. The linear ramp in Eq.~\eqref{eq:gate} is an assumption; moving the
+breakpoint $\sigma^{\star}$ across its range changes the reported cost
+differences by less than \num{0.05} percentage points.
+
+\subsection{Polyhedral form}
+\label{sec:polygon-error}
+
+Equations~\eqref{eq:cont} and~\eqref{eq:short} are second-order cones. Each
+is replaced by an inscribed regular $m$-gon~\cite{bental2001polyhedral},
+%
+\begin{align}
+  (P_i + R_i)\cos\theta_k + Q_i \sin\theta_k
+    &\;\le\; V_i I^{\mathrm{c}} S_i \cos\tfrac{\pi}{m} ,
+  \label{eq:polygon} \\
+  (P_i + \chi R_i + H_i)\cos\theta_k + \tilde{Q}_i \sin\theta_k
+    - a_i \beta_i
+    &\;\le\; V^{\mathrm{sh}}_i I^{\mathrm{c}} S_i \cos\tfrac{\pi}{m} ,
+  \label{eq:polygon-short}
+\end{align}
+%
+for $\theta_k = 2\pi k / m$, $k = 0, \dots, m-1$, with
+$\beta_i = V^{\mathrm{sh}}_i (I^{\mathrm{s}} - I^{\mathrm{c}}) S_i
+\cos(\pi/m)$ the width of the overload band. The band width is a parameter,
+so both constraints are affine. The polygon is an inner approximation: the
+clearing cost is an upper bound on that of the exact conic problem. With
+$m = 24$ the cleared cost exceeds the exact second-order cone solution by at
+most \SI{0.066}{\percent} over the configurations of
+Section~\ref{sec:results}, and by \SI{0.0045}{\percent} with $m = 96$. The case
+study uses $m = 24$, and $m = 192$ where the polygon error would be comparable
+to the effect measured.
+
+\subsection{Sign of the error of the active-power bound}
+\label{sec:sign}
+
+Consider a sustained operating point admitted by both representations. The
+radius allowed by the short-term constraint is
+%
+\begin{equation}
+  L_i = V^{\mathrm{sh}}_i \big[ I^{\mathrm{c}}
+        + a_i (I^{\mathrm{s}} - I^{\mathrm{c}}) \big] S_i .
+  \label{eq:radius}
+\end{equation}
+%
+The active-power bound leaves inertial headroom
+$H^{\mathrm{ap}}_i = \bar{P}_i - (P_i + R_i)$ and the capability set leaves
+$H^{\mathrm{set}}_i = \sqrt{L_i^2 - \tilde{Q}_i^2} - (P_i + \chi R_i)$, so
+%
+\begin{equation}
+  \Delta H_i = H^{\mathrm{set}}_i - H^{\mathrm{ap}}_i
+    = \sqrt{L_i^2 - \tilde{Q}_i^2} - \bar{P}_i + (1 - \chi) R_i .
+  \label{eq:difference}
+\end{equation}
+%
+At $\chi = 1$ the difference does not depend on the sustained active power.
+
+\medskip
+\noindent\textbf{Proposition.} Let $\chi = 1$ and $L_i$ be given by
+Eq.~\eqref{eq:radius}.
+\emph{(i)} If $L_i > \bar{P}_i$, define
+$\tilde{Q}^{\mathrm{crit}}_i = \sqrt{L_i^2 - \bar{P}_i^2}$. The active-power
+bound understates the inertial headroom for
+$|\tilde{Q}_i| < \tilde{Q}^{\mathrm{crit}}_i$, is exact at
+$|\tilde{Q}_i| = \tilde{Q}^{\mathrm{crit}}_i$, and overstates it for
+$|\tilde{Q}_i| > \tilde{Q}^{\mathrm{crit}}_i$.
+\emph{(ii)} If $L_i = \bar{P}_i$, the two agree only at $\tilde{Q}_i = 0$ and
+the bound overstates elsewhere.
+\emph{(iii)} If $L_i < \bar{P}_i$, the bound overstates for every admissible
+$\tilde{Q}_i$.
+\medskip
+
+The proof follows from Eq.~\eqref{eq:difference}. A higher $I^{\mathrm{s}}$, a
+higher voltage or a larger band availability increases $L_i$ and moves the
+bound towards understatement; a larger $|\tilde{Q}_i|$ moves it towards
+overstatement. The multiplier that would make Eq.~\eqref{eq:box} exact,
+$\gamma_i = \sqrt{L_i^2 - \tilde{Q}_i^2} / \bar{P}_i$, varies with voltage,
+reactive dispatch, short-term rating and band availability, so no constant
+derating reproduces it. The quantities in the condition are available at the
+time of clearing: terminal voltage from the state estimator, ratings from
+equipment data and reactive dispatch from the schedule. Region (iii) applies
+when $V^{\mathrm{sh}}_i I^{\mathrm{s}} < \bar{P}_i / S_i$ with the band
+withdrawn, i.e.\ at low voltage with little overload capability.
+
+Fig.~\ref{fig:signmap} gives the crossing for $\bar{P} = S$ and full
+band availability. At $I^{\mathrm{s}} =
+\SI{1.5}{\pu}$ the crossing exceeds the rating over the normal voltage band,
+so the bound is conservative for practical reactive dispatch. At
+$I^{\mathrm{s}} = \SI{1.1}{\pu}$ it lies between \num{0.30} and \num{0.58}, a
+range that ordinary reactive duty reaches. The condition was checked against
+the exact disc at \num{1884} points over $V \in [0.90, 1.08]$,
+$I^{\mathrm{s}} \in [1.0, 1.8]$, three band availabilities and two bounds,
+and gives the correct sign at all of them.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig3_sign_map}
+  \caption{Crossing $\tilde{Q}^{\mathrm{crit}}$ (pu of rating) at
+  $\bar{P} = S$ and full band availability. Below the heavy contour
+  $L < \bar{P}$ and the bound overstates at every reactive dispatch.}
+  \label{fig:signmap}
+\end{figure}
+
+\section{Market clearing formulation}
+\label{sec:clearing}
+
+\subsection{Objective and requirements}
+
+The clearing covers $T$ periods of length $\Delta$ with converters $i \in
+\mathcal{I}$, synchronous units $g \in \mathcal{G}$ and zones $z \in
+\mathcal{Z}$. The decisions are converter discharge $p^{\mathrm{d}}$, charge
+$p^{\mathrm{c}}$, curtailment $c$, reactive output $Q$, reserve $R$, inertial
+power $H$, band availability $a$ and state of charge $\sigma$, and
+synchronous energy $p^{\mathrm{g}}$ and reserve $r^{\mathrm{g}}$. With
+$e_i^t$ the available converter injection, the net converter injection is
+%
+\begin{equation}
+  P_i^t = e_i^t + p^{\mathrm{d},t}_i - p^{\mathrm{c},t}_i - c_i^t ,
+  \label{eq:injection}
+\end{equation}
+%
+and the objective is
+%
+\begin{align}
+  \min \; \Delta \sum_t \Big[ & \sum_i \big( \kappa^{\mathrm{e}}
+      p^{\mathrm{d},t}_i + \kappa^{\mathrm{r}} R_i^t
+      + \kappa^{\mathrm{h}} H_i^t + \kappa^{\mathrm{q}} Q_i^t
+      + \kappa^{\mathrm{cyc}} ( p^{\mathrm{d},t}_i + p^{\mathrm{c},t}_i )
+      \big) \nonumber \\
+  & + \sum_g \big( \kappa^{\mathrm{ge}} p^{\mathrm{g},t}_g
+    + \kappa^{\mathrm{gr}} r^{\mathrm{g},t}_g \big) \Big] ,
+  \label{eq:objective}
+\end{align}
+%
+with energy offers in \$/MWh and availability offers in \$/MW/h. The power
+balance and the reserve, inertia and zonal reactive requirements are
+%
+\begin{align}
+  \sum_i P_i^t + \sum_g p^{\mathrm{g},t}_g
+    &= D^t + \ell^t(\mathbf{x}^t) ,
+  \label{eq:balance} \\
+  \sum_i R_i^t + \sum_g r_g^{\mathrm{g},t} &\;\ge\; \rho \, D^t ,
+  \label{eq:reserve} \\
+  \sum_{i} H_i^t &\;\ge\; P^{\mathrm{loss}}_{\omega}
+    - \tfrac{2\dot{f}^{\max}}{f_0}
+      \textstyle\sum_{g \ne \omega} \mathcal{H}_g S_g
+    \quad \forall\, \omega \in \mathcal{G} , \label{eq:inertia} \\
+  \sum_{i \ne \omega} H_i^t &\;\ge\; P^{\mathrm{loss}}_{\omega}
+    - \tfrac{2\dot{f}^{\max}}{f_0}
+      \textstyle\sum_{g} \mathcal{H}_g S_g
+    \quad \forall\, \omega \in \mathcal{I} , \label{eq:inertia-conv} \\
+  \sum_{i \in \mathcal{I}_z} Q_i^t &\;\ge\; \varphi \, Q^{z,t}
+    \quad \forall\, z \in \mathcal{Z} .
+  \label{eq:reactive}
+\end{align}
+%
+In Eq.~\eqref{eq:balance}, $\ell^t$ is the linearised loss term of
+Section~\ref{sec:acloop}; it is zero in the first (lossless) clearing. The
+inertia requirement is written once per credible outage $\omega$, and the
+contribution of the tripped resource is removed from the side on which it
+appears. The loss $P^{\mathrm{loss}}_\omega$ is the scheduled active bound of
+the unit for both fleets, so the clearing cannot reduce its own contingency
+by de-loading the unit that sets it. Commitment is fixed.
+
+The store follows
+%
+\begin{equation}
+  \sigma_i^{t} = \sigma_i^{t-1}
+    - \frac{\Delta \, p^{\mathrm{d},t}_i}{\eta_{\mathrm{d}} E_i}
+    + \frac{\Delta \, \eta_{\mathrm{c}} \, p^{\mathrm{c},t}_i}{E_i} ,
+  \qquad \sigma_i^{T} = \sigma_i^{0} ,
+  \label{eq:store}
+\end{equation}
+%
+without a complementarity constraint; simultaneous charge and discharge of a
+unit does not occur in any reported schedule. Branch flows are limited through
+the shift-factor matrix $\boldsymbol{\Psi}$,
+%
+\begin{equation}
+  \big| \boldsymbol{\Psi} \big( \mathbf{P}^t + \mathbf{p}^{\mathrm{g},t}
+  - \mathbf{d}^t \big) \big| \;\le\; \mathbf{f}^{\max} ,
+  \label{eq:flows}
+\end{equation}
+%
+and the net converter injection is bounded by the scheduled active limit,
+$-P^{\mathrm{sch}}_i \le P_i^t \le P^{\mathrm{sch}}_i$.
+
+Table~\ref{tab:bounds} distinguishes the three bounds that appear in the
+comparison. $P^{\mathrm{sch}}_i$ and $S_i$ are common to all models;
+$\bar{P}_i$ belongs to the comparison model of Eq.~\eqref{eq:box} only.
+Results are reported for both $\bar{P}_i = S_i$ and
+$\bar{P}_i = P^{\mathrm{sch}}_i$.
+
+\begin{table}[t]
+  \caption{Converter bounds used in the clearing and in the comparison
+  model.}
+  \label{tab:bounds}
+  \centering
+  \small
+  \begin{tabularx}{\columnwidth}{@{}l X X@{}}
+    \toprule
+    Bound & Quantity limited & Value \\
+    \midrule
+    $P^{\mathrm{sch}}_i$ & net scheduled active injection
+      & rated active power of the converter \\
+    $S_i$ & radius of the capability disc
+      & $P^{\mathrm{sch}}_i / (P/S)$, Section~\ref{sec:systems} \\
+    $\bar{P}_i$ & $P_i + R_i + H_i$ in Eq.~\eqref{eq:box}
+      & $S_i$ or $P^{\mathrm{sch}}_i$ (both reported) \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Prices}
+\label{sec:prices}
+
+Prices are the multipliers of the requirements~\cite{schweppe1988spot}:
+$\lambda^t$ for Eq.~\eqref{eq:balance}, $\mu^{\mathrm{r},t}$ for
+Eq.~\eqref{eq:reserve} and $\mu^{z,t}$ for Eq.~\eqref{eq:reactive}. The
+inertia requirement has one row per outage, and the individual rows are
+degenerate, so the multiplier of a single row depends on the basis returned by
+the solver. The inertia price reported here is therefore defined as the
+marginal cost of raising all inertia rows of a period by one megawatt, i.e.\
+the sum of their multipliers, averaged over the day. This quantity is a
+directional derivative of the optimal cost. It is verified by re-clearing with
+perturbations of \SIlist{1;0.25;0.01}{\MW}, and its left and right limits are
+reported as a price range. With fixed commitment
+the clearing is a linear programme, so no pricing rule for integer decisions
+is needed~\cite{oneill2005efficient,gribik2007market}.
+
+\subsection{AC-feasible clearing}
+\label{sec:acloop}
+
+Equations~\eqref{eq:flows} and~\eqref{eq:reactive} do not guarantee that a
+schedule satisfies the ac network limits. The final schedules are therefore
+obtained by successive linear programming~\cite{alsac1990further,
+castillo2016successive}. Round $k$ consists of four steps.
+\begin{enumerate}
+  \item \emph{Clearing.} The linear programme is solved with the rows of step
+        4 from round $k-1$. A lexicographic second solve selects, among
+        schedules of equal cost, the one with least storage throughput, which
+        makes the schedule unique; prices are taken from the first solve.
+  \item \emph{Power flow and voltage control.} An ac power flow is solved for
+        each period with converters as $PQ$ injections. Generator and
+        reference-machine voltage setpoints and transformer taps are adjusted
+        by a least-change search until bus voltages and machine reactive
+        outputs are within limits; reactive limits are not enforced by the
+        solver, so a violation appears as a reactive excess. These controls
+        are not market products and carry no price.
+  \item \emph{Validation.} The schedule is checked against every bus voltage
+        limit, every machine reactive limit, the loading of every branch at
+        its more heavily loaded end, the difference between the cleared and
+        the actual output of the reference machine together with its active
+        limits and sold reserve, and, for the capability set, each converter
+        current recomputed at the ac terminal voltage.
+  \item \emph{Linearisation.} Sensitivities of bus voltages, machine reactive
+        outputs, branch flows and losses to the controlled injections are
+        taken about the power-flow solution by central differences. They
+        give (a) the loss term $\ell^t$ of Eq.~\eqref{eq:balance}; (b)
+        branch apparent-power limits as inscribed polygons, tightened by the
+        ratio of measured to linearised loading; (c) rows that remove small
+        residual voltage and reactive violations or otherwise prevent them
+        from increasing; and (d) a trust region on the active and reactive
+        injection at each controlled bus, which shrinks geometrically from
+        \SI{4}{\percent} of peak demand. The converter terminal voltages in
+        Eqs.~\eqref{eq:polygon}--\eqref{eq:polygon-short} are updated.
+\end{enumerate}
+The iteration stops when the validation of step 3 passes within the
+tolerances of Table~\ref{tab:acfinal}. Every subproblem is a linear
+programme, and the reported prices are the multipliers of the final one, i.e.\
+marginal prices conditional on the final linearisation and control settings.
+
+\subsection{Post-contingency deliverability}
+\label{sec:secure-form}
+
+Equation~\eqref{eq:flows} limits the pre-contingency dispatch only. For a set
+$\Omega$ of secured generator outages, the procured response is also required
+to reach the network. After the loss of unit $\omega$, its scheduled output
+$p^{\mathrm{g},t}_\omega$ is replaced by the held response, deployed in
+proportion $\phi^t_\omega \in [0,1]$ to the holdings $R_i^t + H_i^t$ and
+$r^{\mathrm{g},t}_g$ ($g \ne \omega$), and the remainder is supplied by the
+surviving synchronous machines in proportion to their stored energy
+$\mathcal{H}_g S_g$. With $\mathbf{s}_\omega$ that sharing vector and
+$\mathbf{u}^t_\omega$ the vector of deployed holdings,
+%
+\begin{equation}
+  \big| \boldsymbol{\Psi} \big( \mathbf{P}^t + \mathbf{p}^{\mathrm{g},t}
+    - \mathbf{d}^t
+    - p^{\mathrm{g},t}_\omega \mathbf{1}_\omega
+    + \phi^t_\omega \mathbf{u}^t_\omega
+    + ( p^{\mathrm{g},t}_\omega - \phi^t_\omega
+        \mathbf{1}^{\!\top} \mathbf{u}^t_\omega ) \mathbf{s}_\omega
+    \big) \big| \;\le\; \varepsilon \, \mathbf{f}^{\max}
+  \label{eq:secure}
+\end{equation}
+%
+for all $\omega \in \Omega$ and $t$, where $\varepsilon = 1.25$ is the
+short-term emergency rating factor. The fraction
+$\phi^t_\omega = \min(1, p^{\mathrm{g},t}_\omega / \mathbf{1}^{\!\top}
+\mathbf{u}^t_\omega)$ is a ratio of decisions; it is fixed from the previous
+solution and iterated with damping until it changes by less than
+\num{e-3}, so Eq.~\eqref{eq:secure} is linear in each solve.

@@ -1,0 +1,11 @@
+# Direct imports. The exact environment the results were produced with,
+# including every transitive dependency, is pinned in requirements-lock.txt:
+#
+#     pip install -r requirements-lock.txt
+#
+matplotlib>=3.11.1
+numpy>=2.4.6
+pandapower>=3.5.4
+pandas>=2.3.3
+scipy>=1.18.0
+cvxpy>=1.9.2

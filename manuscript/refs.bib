@@ -1,0 +1,608 @@
+% ---------------------------------------------------------------------------
+% Verified 2026-08-07. Every journal and conference entry was resolved by DOI
+% against Crossref and its full author list compared name by name, not by
+% surname alone. Preprints and reports were checked against the documents.
+%
+% Five entries were wrong and are corrected here. Three carried authors that
+% were not the authors: park2026inertia had Sangwoo Park where the paper has
+% Sojin Park; jiang2025frequency named neither author correctly and is Fan
+% Jiang and Xingpeng Li; beigifard2026frequency had Ali where the paper has
+% Sina Hossein Beigi Fard. Two carried wrong given names: Paturet is Matthieu,
+% and Trovato's co-author is Agnes Bialecki. Two more were corrected earlier,
+% the Energies authors and the Bottrell and Green title.
+%
+% The first check missed all of these because it compared surnames only and
+% skipped anything Crossref does not index. Anything added from here on must
+% be resolved by DOI or read from the document itself.
+%
+% arXiv DOIs. All three preprints carry an arXiv-issued DataCite DOI of the
+% form 10.48550/arXiv.<id>, checked at arxiv.org on 22 August 2026 for
+% 2601.04504, 2512.01814 and 2606.05534. This was once written into the
+% entries' note fields, which elsarticle prints: the caveat went into the
+% typeset reference list where an editor would read it. Notes are printed.
+% Anything meant for whoever edits this file goes in a percent comment.
+%
+% Publication status of the three works this paper is positioned against,
+% re-checked 8 August 2026 at the source rather than from memory:
+%
+%   park2026inertia        arXiv:2601.04504, submitted 8 January 2026.
+%                          Still a preprint; no journal reference.
+%   jiang2025frequency     arXiv:2512.01814, submitted 1 December 2025.
+%                          Still a preprint; no journal reference.
+%   beigifard2026frequency published. Scientific Reports 16, 14305,
+%                          20 March 2026, doi 10.1038/s41598-026-43137-z,
+%                          confirmed through Crossref.
+%
+% Two of the three are therefore preprints and one is not, which is what the
+% introduction says. Re-check the two preprints again immediately before
+% submission; either may have appeared since.
+%
+% miso2024gfm is the July 2024 draft, version 0.2, taken to the IPWG on
+% 23 July 2024. The sentence quoted in Section 2 --- "temporarily cease to
+% operate as a voltage source (e.g., operating at short-duration current
+% rating limits during voltage ride-through)" --- was read from that document
+% and appears in it verbatim.
+% ---------------------------------------------------------------------------
+
+% --- system operator and industry sources ----------------------------------
+
+@techreport{aemo2023gfm,
+  author      = {{Australian Energy Market Operator}},
+  title       = {Voluntary Specification for Grid-forming Inverters},
+  institution = {AEMO},
+  year        = {2023},
+  month       = {May},
+  address     = {Melbourne, Australia}
+}
+
+% Title read from the document itself, June 2026. The entry previously
+% carried "Grid-Forming Inverter-Based Resources: Capabilities, Applications
+% and Interconnection Considerations", which is not the title of anything.
+% It is a draft whitepaper, version 0.1, and is cited as one.
+@techreport{miso2024gfm,
+  author      = {{Midcontinent Independent System Operator}},
+  title       = {{MISO} Grid-Forming Battery Energy Storage Capabilities,
+                 Performance, and Simulation Test Requirements Proposal},
+  institution = {MISO},
+  type        = {Draft whitepaper, version 0.2},
+  year        = {2024},
+  month       = {July},
+  note        = {Presented to the IPWG, 23 July 2024}
+}
+
+@techreport{entsoe2020gfm,
+  author      = {{ENTSO-E}},
+  title       = {High Penetration of Power Electronic Interfaced Power Sources
+                 and the Potential Contribution of Grid Forming Converters},
+  institution = {ENTSO-E},
+  year        = {2020},
+  address     = {Brussels, Belgium}
+}
+
+@techreport{lin2020roadmap,
+  author      = {Lin, Yashen and Eto, Joseph H. and Johnson, Brian B. and
+                 Flicker, Jack D. and Lasseter, Robert H. and
+                 Villegas Pico, Hugo N. and Seo, Gab-Su and
+                 Pierre, Brian J. and Ellis, Abraham},
+  title       = {Research Roadmap on Grid-Forming Inverters},
+  institution = {National Renewable Energy Laboratory},
+  number      = {NREL/TP-5D00-73476},
+  year        = {2020}
+}
+
+% --- low-inertia operation --------------------------------------------------
+
+@inproceedings{ulbig2014inertia,
+  author    = {Ulbig, Andreas and Borsche, Theodor S. and Andersson, G{\"o}ran},
+  title     = {Impact of Low Rotational Inertia on Power System Stability and
+               Operation},
+  booktitle = {Proceedings of the 19th IFAC World Congress},
+  pages     = {7290--7297},
+  year      = {2014},
+  doi     = {10.3182/20140824-6-ZA-1003.02615}
+}
+
+@article{tielens2016inertia,
+  author  = {Tielens, Pieter and Van Hertem, Dirk},
+  title   = {The relevance of inertia in power systems},
+  journal = {Renewable and Sustainable Energy Reviews},
+  volume  = {55},
+  pages   = {999--1009},
+  year    = {2016},
+  doi     = {10.1016/j.rser.2015.11.016}
+}
+
+@inproceedings{milano2018lowinertia,
+  author    = {Milano, Federico and D{\"o}rfler, Florian and Hug, Gabriela and
+               Hill, David J. and Verbi{\v{c}}, Gregor},
+  title     = {Foundations and Challenges of Low-Inertia Systems},
+  booktitle = {Power Systems Computation Conference (PSCC)},
+  year      = {2018},
+  pages     = {1--25},
+  doi     = {10.23919/PSCC.2018.8450880}
+}
+
+@article{matevosyan2019gfm,
+  author  = {Matevosyan, Julia and Badrzadeh, Babak and Prevost, Thibault and
+             Quitmann, Eckard and Ramasubramanian, Deepak and
+             Urdal, Helge and Achilles, Sebastian and MacDowell, Jason and
+             Huang, Shun Hsien and Vital, Vijay and O'Sullivan, Jon and
+             Quint, Ryan},
+  title   = {Grid-Forming Inverters: Are They the Key for High Renewable
+             Penetration?},
+  journal = {IEEE Power and Energy Magazine},
+  volume  = {17},
+  number  = {6},
+  pages   = {89--98},
+  year    = {2019},
+  doi     = {10.1109/MPE.2019.2933072}
+}
+
+% --- converter control ------------------------------------------------------
+
+@article{rocabert2012control,
+  author  = {Rocabert, Joan and Luna, Alvaro and Blaabjerg, Frede and
+             Rodr{\'i}guez, Pedro},
+  title   = {Control of Power Converters in {AC} Microgrids},
+  journal = {IEEE Transactions on Power Electronics},
+  volume  = {27},
+  number  = {11},
+  pages   = {4734--4749},
+  year    = {2012},
+  doi     = {10.1109/TPEL.2012.2199334}
+}
+
+@article{zhong2011synchronverter,
+  author  = {Zhong, Qing-Chang and Weiss, George},
+  title   = {Synchronverters: Inverters That Mimic Synchronous Generators},
+  journal = {IEEE Transactions on Industrial Electronics},
+  volume  = {58},
+  number  = {4},
+  pages   = {1259--1267},
+  year    = {2011},
+  doi     = {10.1109/TIE.2010.2048839}
+}
+
+@book{yazdani2010vsc,
+  author    = {Yazdani, Amirnaser and Iravani, Reza},
+  title     = {Voltage-Sourced Converters in Power Systems: Modeling, Control,
+               and Applications},
+  publisher = {Wiley--IEEE Press},
+  year      = {2010}
+}
+
+@article{poolla2019placement,
+  author  = {Poolla, Bala Kameshwar and Gro{\ss}, Dominic and
+             D{\"o}rfler, Florian},
+  title   = {Placement and Implementation of Grid-Forming and Grid-Following
+             Virtual Inertia and Fast Frequency Response},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {34},
+  number  = {4},
+  pages   = {3035--3046},
+  year    = {2019},
+  doi     = {10.1109/TPWRS.2019.2892290}
+}
+
+% --- inertia- and frequency-constrained scheduling --------------------------
+
+@article{park2026inertia,
+  author  = {Park, Sojin and Baldick, Ross and Shin, Hunyoung},
+  title   = {Definition and Formulation of Inertia Service Incorporating
+             Inverter-Based Resources},
+  journal = {arXiv preprint arXiv:2601.04504},
+  year    = {2026},
+  doi     = {10.48550/arXiv.2601.04504}
+}
+
+@article{jiang2026learning,
+  author  = {Fan Jiang and Xingpeng Li},
+  title   = {Learning-Assisted Day-Ahead Energy Scheduling for
+             Frequency-Secure Inverter-Dominated Grids with Grid-Forming
+             Battery Energy Storage Systems},
+  journal = {arXiv preprint arXiv:2606.05534},
+  year    = {2026},
+  doi     = {10.48550/arXiv.2606.05534}
+}
+
+@article{jiang2025frequency,
+  author  = {Jiang, Fan and Li, Xingpeng},
+  title   = {Frequency-Dynamics-Aware Economic Dispatch with Optimal
+             Grid-Forming Inverter Allocation and Reserved Power Headroom},
+  journal = {arXiv preprint arXiv:2512.01814},
+  year    = {2025},
+  doi     = {10.48550/arXiv.2512.01814}
+}
+
+@article{beigifard2026frequency,
+  author  = {Beigi Fard, Sina Hossein and Shakarami, Mahmoud Reza and
+             Doostizadeh, Meysam},
+  title   = {Frequency-constrained robust unit commitment via physics-guided
+             piecewise-linear nadir surrogates and adaptive virtual inertia},
+  journal = {Scientific Reports},
+  volume  = {16},
+  pages   = {14305},
+  year    = {2026},
+  doi     = {10.1038/s41598-026-43137-z}
+}
+
+@article{teng2016stochastic,
+  author  = {Teng, Fei and Trovato, Vincenzo and Strbac, Goran},
+  title   = {Stochastic Scheduling With Inertia-Dependent Fast Frequency
+             Response Requirements},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {31},
+  number  = {2},
+  pages   = {1557--1566},
+  year    = {2016},
+  doi     = {10.1109/TPWRS.2015.2434837}
+}
+
+@article{paturet2020stochastic,
+  author  = {Paturet, Matthieu and Markovic, Uros and
+             Delikaraoglou, Stefanos and Vrettos, Evangelos and
+             Aristidou, Petros and Hug, Gabriela},
+  title   = {Stochastic Unit Commitment in Low-Inertia Grids},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {35},
+  number  = {5},
+  pages   = {3448--3458},
+  year    = {2020},
+  doi     = {10.1109/TPWRS.2020.2987076}
+}
+
+@article{chavez2014governor,
+  author  = {Ch{\'a}vez, Hector and Baldick, Ross and Sharma, Sandip},
+  title   = {Governor Rate-Constrained {OPF} for Primary Frequency Control
+             Adequacy},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {29},
+  number  = {3},
+  pages   = {1473--1480},
+  year    = {2014},
+  doi     = {10.1109/TPWRS.2014.2298838}
+}
+
+@article{energies2020reserve,
+  author  = {Garozzo, Dario and Tina, Giuseppe Marco},
+  title   = {Evaluation of the Effective Active Power Reserve for Fast
+             Frequency Response of {PV} with {BESS} Inverters Considering
+             Reactive Power Control},
+  journal = {Energies},
+  volume  = {13},
+  number  = {13},
+  pages   = {3437},
+  year    = {2020},
+  doi     = {10.3390/en13133437}
+}
+
+% --- pricing and optimisation -----------------------------------------------
+
+@book{schweppe1988spot,
+  author    = {Schweppe, Fred C. and Caramanis, Michael C. and
+               Tabors, Richard D. and Bohn, Roger E.},
+  title     = {Spot Pricing of Electricity},
+  publisher = {Kluwer Academic Publishers},
+  year      = {1988}
+}
+
+@article{bental2001polyhedral,
+  author  = {Ben-Tal, Aharon and Nemirovski, Arkadi},
+  title   = {On Polyhedral Approximations of the Second-Order Cone},
+  journal = {Mathematics of Operations Research},
+  volume  = {26},
+  number  = {2},
+  pages   = {193--205},
+  year    = {2001},
+  doi     = {10.1287/moor.26.2.193.10561}
+}
+
+% --- test systems and software ---------------------------------------------
+
+@article{thurner2018pandapower,
+  author  = {Thurner, Leon and Scheidler, Alexander and Sch{\"a}fer, Florian
+             and Menke, Jan-Hendrik and Dollichon, Julian and Meier, Friederike
+             and Meinecke, Steffen and Braun, Martin},
+  title   = {pandapower --- An Open-Source Python Tool for Convenient Modeling,
+             Analysis, and Optimization of Electric Power Systems},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {33},
+  number  = {6},
+  pages   = {6510--6521},
+  year    = {2018},
+  doi     = {10.1109/TPWRS.2018.2829021}
+}
+
+@article{grigg1999rts,
+  author  = {Grigg, Cliff and Wong, Peter and Albrecht, Paul and
+             Allan, Ron and Bhavaraju, Murty and Billinton, Roy and others},
+  title   = {The {IEEE} Reliability Test System --- 1996},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {14},
+  number  = {3},
+  pages   = {1010--1020},
+  year    = {1999},
+  doi     = {10.1109/59.780914}
+}
+
+@book{pai1989energy,
+  author    = {Pai, M. A.},
+  title     = {Energy Function Analysis for Power System Stability},
+  publisher = {Kluwer Academic Publishers},
+  year      = {1989}
+}
+
+@article{virtanen2020scipy,
+  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and
+             others},
+  title   = {{SciPy} 1.0: Fundamental Algorithms for Scientific Computing in
+             {Python}},
+  journal = {Nature Methods},
+  volume  = {17},
+  pages   = {261--272},
+  year    = {2020},
+  doi     = {10.1038/s41592-019-0686-2}
+}
+
+@article{huangfu2018parallel,
+  author  = {Huangfu, Qi and Hall, J. A. J.},
+  title   = {Parallelizing the dual revised simplex method},
+  journal = {Mathematical Programming Computation},
+  volume  = {10},
+  number  = {1},
+  pages   = {119--142},
+  year    = {2018},
+  doi     = {10.1007/s12532-017-0130-5}
+}
+
+% --- added in the second pass, to bring the list to the norm for this journal
+
+@article{kroposki2017achieving,
+  author  = {Kroposki, Benjamin and Johnson, Brian and Zhang, Yingchen and
+             Gevorgian, Vahan and Denholm, Paul and Hodge, Bri-Mathias and
+             Hannegan, Bryan},
+  title   = {Achieving a 100\% Renewable Grid: Operating Electric Power
+             Systems with Extremely High Levels of Variable Renewable Energy},
+  journal = {IEEE Power and Energy Magazine},
+  volume  = {15},
+  number  = {2},
+  pages   = {61--73},
+  year    = {2017},
+  doi     = {10.1109/MPE.2016.2637122}
+}
+
+@techreport{denholm2020inertia,
+  author      = {Denholm, Paul and Mai, Trieu and Kenyon, Rick Wallace and
+                 Kroposki, Benjamin and O'Malley, Mark},
+  title       = {Inertia and the Power Grid: A Guide Without the Spin},
+  institution = {National Renewable Energy Laboratory},
+  number      = {NREL/TP-6A20-73856},
+  year        = {2020}
+}
+
+@article{dorfler2023control,
+  author  = {D{\"o}rfler, Florian and Gro{\ss}, Dominic},
+  title   = {Control of Low-Inertia Power Systems},
+  journal = {Annual Review of Control, Robotics, and Autonomous Systems},
+  volume  = {6},
+  pages   = {415--445},
+  year    = {2023},
+  doi     = {10.1146/annurev-control-052622-032657}
+}
+
+@article{tayyebi2020frequency,
+  author  = {Tayyebi, Ali and Gro{\ss}, Dominic and Anta, Adolfo and
+             Kupzog, Friederich and D{\"o}rfler, Florian},
+  title   = {Frequency Stability of Synchronous Machines and Grid-Forming
+             Power Converters},
+  journal = {IEEE Journal of Emerging and Selected Topics in Power
+             Electronics},
+  volume  = {8},
+  number  = {2},
+  pages   = {1004--1018},
+  year    = {2020},
+  doi     = {10.1109/JESTPE.2020.2966524}
+}
+
+@inproceedings{pattabiraman2018comparison,
+  author    = {Pattabiraman, Dinesh and Lasseter, Robert H. and
+               Jahns, Thomas M.},
+  title     = {Comparison of Grid Following and Grid Forming Control for a
+               High Inverter Penetration Power System},
+  booktitle = {IEEE Power \& Energy Society General Meeting},
+  year      = {2018},
+  pages     = {1--5},
+  doi     = {10.1109/PESGM.2018.8586162}
+}
+
+@article{qoria2020current,
+  author  = {Qoria, Taoufik and Gruson, Fran{\c{c}}ois and Colas, Fr{\'e}d{\'e}ric
+             and Kestelyn, Xavier and Guillaud, Xavier},
+  title   = {Current limiting algorithms and transient stability analysis of
+             grid-forming {VSC}s},
+  journal = {Electric Power Systems Research},
+  volume  = {189},
+  pages   = {106726},
+  year    = {2020},
+  doi     = {10.1016/j.epsr.2020.106726}
+}
+
+@article{bottrell2014comparison,
+  author  = {Bottrell, Nathaniel and Green, Timothy C.},
+  title   = {Comparison of Current-Limiting Strategies During Fault
+             Ride-Through of Inverters to Prevent Latch-Up and Wind-Up},
+  journal = {IEEE Transactions on Power Electronics},
+  volume  = {29},
+  number  = {7},
+  pages   = {3786--3797},
+  year    = {2014},
+  doi     = {10.1109/TPEL.2013.2279162}
+}
+
+@article{markovic2021understanding,
+  author  = {Markovic, Uros and Stanojev, Ognjen and Aristidou, Petros and
+             Vrettos, Evangelos and Callaway, Duncan and Hug, Gabriela},
+  title   = {Understanding Small-Signal Stability of Low-Inertia Systems},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {36},
+  number  = {5},
+  pages   = {3997--4017},
+  year    = {2021},
+  doi     = {10.1109/TPWRS.2021.3061434}
+}
+
+@article{badesa2019simultaneous,
+  author  = {Badesa, Luis and Teng, Fei and Strbac, Goran},
+  title   = {Simultaneous Scheduling of Multiple Frequency Services in
+             Stochastic Unit Commitment},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {34},
+  number  = {5},
+  pages   = {3858--3868},
+  year    = {2019},
+  doi     = {10.1109/TPWRS.2019.2905037}
+}
+
+@article{trovato2019unit,
+  author  = {Trovato, Vincenzo and Bialecki, Agnes and Dallagi, Anes},
+  title   = {Unit Commitment With Inertia-Dependent and Multispeed Allocation
+             of Frequency Response Services},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {34},
+  number  = {2},
+  pages   = {1537--1548},
+  year    = {2019},
+  doi     = {10.1109/TPWRS.2018.2870493}
+}
+
+@article{hodge2020addressing,
+  author  = {Hodge, Bri-Mathias S. and Jain, Himanshu and Brancucci, Carlo
+             and Seo, Gab-Su and Korp{\aa}s, Magnus and Kiviluoma, Juha and
+             Holttinen, Hannele and Smith, J. Charles and Orths, Antje and
+             Estanqueiro, Ana and others},
+  title   = {Addressing technical challenges in 100\% variable
+             inverter-based renewable energy power systems},
+  journal = {WIREs Energy and Environment},
+  volume  = {9},
+  number  = {5},
+  pages   = {e376},
+  year    = {2020},
+  doi     = {10.1002/wene.376}
+}
+
+@techreport{nerc2020ffr,
+  author      = {{North American Electric Reliability Corporation}},
+  title       = {Fast Frequency Response Concepts and Bulk Power System
+                 Reliability Needs},
+  institution = {NERC Inverter-Based Resource Performance Task Force},
+  year        = {2020}
+}
+
+@article{zhong2017paas,
+  author  = {Zhong, Qing-Chang},
+  title   = {Power-Electronics-Enabled Autonomous Power Systems: Architecture
+             and Technical Routes},
+  journal = {IEEE Transactions on Industrial Electronics},
+  volume  = {64},
+  number  = {7},
+  pages   = {5907--5918},
+  year    = {2017},
+  doi     = {10.1109/TIE.2017.2677339}
+}
+
+@article{oneill2005efficient,
+  author  = {O'Neill, Richard P. and Sotkiewicz, Paul M. and Hobbs, Benjamin F.
+             and Rothkopf, Michael H. and Stewart, William R.},
+  title   = {Efficient market-clearing prices in markets with nonconvexities},
+  journal = {European Journal of Operational Research},
+  volume  = {164},
+  number  = {1},
+  pages   = {269--285},
+  year    = {2005},
+  doi     = {10.1016/j.ejor.2003.12.011}
+}
+
+@techreport{gribik2007market,
+  author      = {Gribik, Paul R. and Hogan, William W. and Pope, Susan L.},
+  title       = {Market-Clearing Electricity Prices and Energy Uplift},
+  institution = {Harvard University},
+  year        = {2007}
+}
+
+@article{zimmerman2011matpower,
+  author  = {Zimmerman, Ray Daniel and Murillo-S{\'a}nchez, Carlos Edmundo and
+             Thomas, Robert John},
+  title   = {{MATPOWER}: Steady-State Operations, Planning, and Analysis Tools
+             for Power Systems Research and Education},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {26},
+  number  = {1},
+  pages   = {12--19},
+  year    = {2011},
+  doi     = {10.1109/TPWRS.2010.2051168}
+}
+
+% Title, subtitle and date read from the document's own title page,
+% August 2026. Added after review pointed out that omitting it overstates
+% the novelty of the present work: it establishes, at the system operator's
+% own hand, that synthetic inertia from a grid-forming battery depends on
+% the pre-disturbance operating point, the available headroom and the
+% overload capability.
+@techreport{aemo2024inertia,
+  author      = {{Australian Energy Market Operator}},
+  title       = {Quantifying Synthetic Inertia of a Grid-forming Battery
+                 Energy Storage System},
+  type        = {Technical Note},
+  institution = {AEMO},
+  year        = {2024},
+  month       = {September},
+  address     = {Melbourne, Australia}
+}
+
+@article{polat2025inverter,
+  author  = {Polat, Sezai and Biyik, Emrah and
+             {\c{S}}ekerci {\"O}ztura, Hacer},
+  title   = {Optimal active and reactive power scheduling for
+             inverter-integrated {PV} and {BESS} under inverter current
+             constraints},
+  journal = {Electric Power Systems Research},
+  volume  = {245},
+  pages   = {111629},
+  year    = {2025},
+  doi     = {10.1016/j.epsr.2025.111629},
+}
+
+@article{zecchino2021concurrent,
+  author  = {Zecchino, Antonio and Yuan, Zhao and Sossan, Fabrizio and
+             Cherkaoui, Rachid and Paolone, Mario},
+  title   = {Optimal provision of concurrent primary frequency and local
+             voltage control from a {BESS} considering variable capability
+             curves: Modelling and experimental assessment},
+  journal = {Electric Power Systems Research},
+  volume  = {190},
+  pages   = {106643},
+  year    = {2021},
+  doi     = {10.1016/j.epsr.2020.106643},
+}
+
+@article{alsac1990further,
+  author  = {Alsac, O. and Bright, J. and Prais, M. and Stott, B.},
+  title   = {Further developments in {LP}-based optimal power flow},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {5},
+  number  = {3},
+  pages   = {697--711},
+  year    = {1990},
+  doi     = {10.1109/59.65896}
+}
+
+@article{castillo2016successive,
+  author  = {Castillo, Anya and Lipka, Paula and Watson, Jean-Paul and Oren, Shmuel S. and O'Neill, Richard P.},
+  title   = {A successive linear programming approach to solving the {IV-ACOPF}},
+  journal = {IEEE Transactions on Power Systems},
+  volume  = {31},
+  number  = {4},
+  pages   = {2752--2763},
+  year    = {2016},
+  doi     = {10.1109/TPWRS.2015.2487042}
+}

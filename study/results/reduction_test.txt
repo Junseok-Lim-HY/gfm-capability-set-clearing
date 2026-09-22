@@ -1,0 +1,9 @@
+reduction test: V = 1.0 pu, I_s = I_c, no reactive requirement, 192-sided polygon
+   case  share  price box price circle    cost box  cost circle    gap %
+ ieee39    0.2       8.00         8.00   3383389.0    3383417.5   0.0008
+ ieee39    0.4       8.00         8.00   2441212.6    2441263.8   0.0021
+  rts24    0.2       8.00         8.00   1495550.3    1495563.1   0.0009
+  rts24    0.4       6.75         6.75    867605.7     867625.8   0.0023
+
+worst gap 0.0023 per cent against a tolerance of 0.1; the inscribed 192-gon imposes up to 0.027 per cent on the active coordinate, and the radial figure 0.0134 understates that
+PASS

@@ -1,0 +1,160 @@
+\documentclass[final,5p,times,twocolumn]{elsarticle}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage[hidelinks]{hyperref}
+\usepackage{siunitx}
+\sisetup{detect-all, group-separator = {,}, group-minimum-digits = 4,
+  group-digits = integer, range-phrase = --, range-units = single,
+  list-units = single}
+\DeclareSIUnit{\MW}{MW}
+\DeclareSIUnit{\MWh}{MWh}
+\DeclareSIUnit{\MVA}{MVA}
+\DeclareSIUnit{\MVAr}{MVAr}
+
+\graphicspath{{figures/}}
+
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\setcounter{dbltopnumber}{3}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\dbltopfraction}{0.92}
+\renewcommand{\bottomfraction}{0.5}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.70}
+\renewcommand{\dblfloatpagefraction}{0.70}
+
+\newcommand{\pu}{\ensuremath{\mathrm{pu}}}
+\newcommand{\yes}{\ensuremath{\bullet}}
+\newcommand{\no}{\ensuremath{\circ}}
+
+\journal{Sustainable Energy, Grids and Networks}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Current-limited capability of grid-forming converters in reserve and
+inertia scheduling: formulation, sign condition and validation}
+
+\author[hyu]{Junseok Lim}
+\author[hyu]{Sanghyuk Ji}
+\author[hyu]{Byungjun Lee}
+\author[hyu]{Sungwoo Bae\corref{cor1}}
+\ead{swbae@hanyang.ac.kr}
+\cortext[cor1]{Corresponding author.}
+\address[hyu]{Department of Electrical Engineering, Hanyang University,
+Seoul, Republic of Korea}
+
+\begin{abstract}
+Scheduling formulations in which energy, reserve and inertia share the
+capability of a grid-forming converter bound that capability by active power
+and omit the current limit that couples the three services. This paper
+represents the continuous and short-term current ratings, reactive current
+and terminal voltage of the converter as a polyhedral capability set and
+integrates it in a multi-period linear clearing whose prices are dual
+variables. A piecewise condition is derived for the sign of the error made by
+the active-power bound; it depends on the short-term current radius, the
+bound and the reactive current held during the response. Final schedules on
+the IEEE 39-bus and RTS-24 systems are obtained by successive linearisation
+and satisfy bus voltage, generator reactive, branch loading and balance
+limits in an ac power flow for both representations. The procured response
+is constrained to be deliverable after the largest generator outages, and a
+current-limited RMS converter model confirms that the scheduled inertial
+power is delivered within the current limit at the terminal voltage reached
+during the event. The three omissions change the cleared cost with different
+signs, so a constant derating cannot correct the bound. Across four rating
+conventions, two bound definitions, three comparison models and 605
+randomised converter placements, the capability set is never the more
+expensive representation. The cost difference is about 1\,\% at the base
+case and depends on the rating convention; the inertia price under the
+active-power bound is 2.3 to 13.7 times that under the capability set.
+\end{abstract}
+
+\begin{keyword}
+grid-forming converter \sep inertia \sep operating reserve \sep
+capability curve \sep ancillary service pricing \sep converter current limit
+\end{keyword}
+
+\end{frontmatter}
+
+\begin{table*}[t]
+  \section*{Nomenclature}
+  \centering
+  \small
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l l l l@{}}
+    \toprule
+    $i$, $g$, $t$, $z$, $\omega$ & converter, synchronous unit, period, zone,
+      outage
+      & $P_i$, $Q_i$, $\tilde{Q}_i$ & active, reactive, short-term reactive
+      power \\
+    $S_i$, $P^{\mathrm{sch}}_i$, $\bar{P}_i$ & rating, scheduled active
+      bound, comparison bound
+      & $R_i$, $H_i$ & reserve, inertial power (MW) \\
+    $I^{\mathrm{c}}$, $I^{\mathrm{s}}$ & continuous, short-term current limit
+      (pu)
+      & $p^{\mathrm{d}}$, $p^{\mathrm{c}}$, $c$, $e$ & discharge, charge,
+      curtailment, available injection \\
+    $V_i$, $V^{\mathrm{sh}}_i$ & pre-event, event terminal voltage (pu)
+      & $a_i$, $\sigma_i$ & band availability, state of charge \\
+    $\alpha_i$, $\chi$ & reactive priority, reserve overlap
+      & $p^{\mathrm{g}}$, $r^{\mathrm{g}}$ & synchronous energy, reserve \\
+    $m$, $\beta_i$, $L_i$ & polygon faces, band width, short-term radius
+      & $\lambda$, $\mu$ & energy price, requirement prices \\
+    $\underline{\sigma}^{\mathrm{e}}$, $\sigma^{\star}$, $E_i$ & energy
+      floor, full-band breakpoint, store energy
+      & $\rho$, $\varphi$, $\dot{f}^{\max}$ & reserve, reactive requirement
+      fractions, RoCoF limit \\
+    $\tau^{\mathrm{R}}$, $\tau^{\mathrm{H}}$ & reserve, inertia delivery
+      windows
+      & $\boldsymbol{\Psi}$, $\mathbf{f}^{\max}$, $\varepsilon$ & shift
+      factors, branch ratings, emergency factor \\
+    $\mathcal{H}_g$, $S_g$ & inertia constant (s), rating of unit $g$
+      & $\delta$, $\tilde{Q}^{\mathrm{crit}}$ & cost difference, crossing of
+      the Proposition \\
+    $\kappa^{\bullet}$ & offers
+      & $x^{\mathrm{g}}_i$, $\phi^t_\omega$ & reactance behind terminal,
+      deployed fraction \\
+    \bottomrule
+  \end{tabular*}
+\end{table*}
+
+\input{sec1_3}
+\input{sec4_6}
+
+\section*{CRediT authorship contribution statement}
+
+\textbf{Junseok Lim:} Conceptualization, Methodology, Software, Validation,
+Formal analysis, Writing -- original draft. \textbf{Sanghyuk Ji:} Validation,
+Investigation, Writing -- review \& editing. \textbf{Byungjun Lee:}
+Validation, Visualization, Writing -- review \& editing. \textbf{Sungwoo
+Bae:} Supervision, Funding acquisition, Writing -- review \& editing.
+
+\section*{Declaration of competing interest}
+
+The authors declare that they have no known competing financial interests or
+personal relationships that could have appeared to influence the work
+reported in this paper.
+
+\section*{Data availability}
+
+The code, the modified test cases and converter mapping, the parameters, the
+result files behind every table and figure, and the scripts that regenerate
+them are available at
+\url{https://github.com/Junseok-Lim-HY/gfm-capability-set-clearing}.
+% On acceptance: make the repository public, create the Zenodo release and
+% append "and archived at https://doi.org/10.5281/zenodo.XXXXXXX".
+
+\section*{Acknowledgments}
+
+This work was supported by the Korea Institute of Energy Technology Evaluation and Planning (KETEP) and the Ministry of Climate, Energy and Environment (MCEE) of the Republic of Korea (RS-2023-00234563, Development of power system modeling \& analysis and interoperability evaluation technology applied with grid forming based on distributed energy; and RS-2024-00422103, EV Smart Charging Platform Innovation Research Center).
+
+\bibliographystyle{elsarticle-num}
+\bibliography{refs}
+
+\end{document}

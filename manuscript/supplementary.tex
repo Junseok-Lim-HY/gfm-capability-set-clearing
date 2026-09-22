@@ -1,0 +1,505 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[hidelinks]{hyperref}
+\usepackage{siunitx}
+\sisetup{detect-all, group-separator = {,}, group-minimum-digits = 4,
+  group-digits = integer, range-phrase = --, range-units = single,
+  list-units = single}
+\DeclareSIUnit{\MW}{MW}
+\DeclareSIUnit{\MWh}{MWh}
+\DeclareSIUnit{\MVA}{MVA}
+\DeclareSIUnit{\MVAr}{MVAr}
+\newcommand{\pu}{\ensuremath{\mathrm{pu}}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S\arabic{equation}}
+% float pages: pack the tables at the top instead of spreading them vertically
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{12pt plus 2pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+
+\title{Supplementary Material\\[4pt]
+\large Current-limited capability of grid-forming converters in reserve and
+inertia scheduling: formulation, sign condition and validation}
+\author{Junseok Lim, Sanghyuk Ji, Byungjun Lee, Sungwoo Bae\\
+\small Department of Electrical Engineering, Hanyang University, Seoul,
+Republic of Korea}
+\date{}
+
+\begin{document}
+\maketitle
+
+Equation, table, figure and section numbers of the main text are cited
+without a prefix; those of this document carry the prefix S. All results
+were generated with the code and data available at
+\url{https://github.com/Junseok-Lim-HY/gfm-capability-set-clearing} (see Data
+availability in the main text).
+
+\section{State-of-charge gate}
+\label{s:gate}
+
+The band availability of Eq.~(6) rises linearly from the energy floor
+$\underline{\sigma}^{\mathrm{e}} = 0.05$ to the breakpoint
+$\sigma^{\star}$. Table~\ref{tab:gate} gives the cost difference $\delta$
+against the active-power bound when $\sigma^{\star}$ is varied with the floor
+held; at $\sigma^{\star} = \underline{\sigma}^{\mathrm{e}}$ the gate is
+removed. The fleet-mean availability computed from the cleared
+state-of-charge trajectories falls from \num{1.00} to between \num{0.35} and
+\num{0.62} across the range, and $\delta$ changes by less than \num{0.05}
+percentage points. The gate is retained because a formulation crediting the
+short-term current to an empty store would be incorrect, not because it
+carries a result.
+
+\begin{table}[h]
+  \caption{$\delta$ (\%) and fleet-mean band availability against the
+  full-band breakpoint $\sigma^{\star}$ ($e = \SI{0.8}{\pu}$,
+  $\bar{P} = S$).}
+  \label{tab:gate}
+  \centering
+  \begin{tabular}{l rr rr rr rr}
+    \toprule
+    & \multicolumn{2}{c}{IEEE 39, 0.2} & \multicolumn{2}{c}{IEEE 39, 0.4}
+    & \multicolumn{2}{c}{RTS-24, 0.2} & \multicolumn{2}{c}{RTS-24, 0.4} \\
+    \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(l){8-9}
+    $\sigma^{\star}$ & $\delta$ & avail. & $\delta$ & avail.
+      & $\delta$ & avail. & $\delta$ & avail. \\
+    \midrule
+    0.05 (no gate) & 0.96 & 1.00 & 0.34 & 1.00 & 0.68 & 1.00 & 1.08 & 1.00 \\
+    0.20 (base)    & 0.96 & 1.00 & 0.34 & 1.00 & 0.68 & 1.00 & 1.08 & 1.00 \\
+    0.30           & 0.96 & 0.62 & 0.34 & 0.55 & 0.68 & 0.42 & 1.08 & 0.35 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Polygon approximation and exact second-order cone}
+\label{s:polygon}
+
+The inscribed $m$-gon withholds capability in the active coordinate by up to
+the values in Table~\ref{tab:polygon}, evaluated over reactive dispatches from
+zero to \SI{95}{\percent} of rating. The clearing inherits much less than the
+pointwise worst case: solving the exact conic problem on the same variables
+(constraints (3)--(4) without the $\cos(\pi/m)$ factor, solved with
+CLARABEL through CVXPY) gives the costs in Table~\ref{tab:cone}. The polygon
+cost exceeds the cone cost by at most \SI{0.066}{\percent} at $m = 24$, and
+$\delta_m \le \delta_{\mathrm{exact}}$ in every case, so the reported
+differences are conservative.
+
+\begin{table}[h]
+  \caption{Worst shortfall of the inscribed polygon in the active coordinate
+  and the radial bound $1 - \cos(\pi/m)$ (\%).}
+  \label{tab:polygon}
+  \centering
+  \begin{tabular}{r rr}
+    \toprule
+    $m$ & Active-coordinate shortfall & Radial bound \\
+    \midrule
+    8 & 10.76 & 7.61 \\
+    12 & 6.72 & 3.41 \\
+    24 & 2.70 & 0.86 \\
+    48 & 0.34 & 0.21 \\
+    96 & 0.15 & 0.05 \\
+    192 & 0.03 & 0.01 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[h]
+  \caption{Polygon against exact cone: excess of the polygon clearing cost
+  over the conic cost (\%), and $\delta$ (\%) against the active-power bound
+  for the polygon at three face counts and for the cone.}
+  \label{tab:cone}
+  \centering
+  \begin{tabular}{ll rrr rrrr}
+    \toprule
+    & & \multicolumn{3}{c}{Excess over cone} & \multicolumn{4}{c}{$\delta$} \\
+    \cmidrule(lr){3-5}\cmidrule(l){6-9}
+    System, share & $e$ & $m{=}24$ & $m{=}96$ & $m{=}384$
+      & $m{=}24$ & $m{=}96$ & $m{=}384$ & cone \\
+    \midrule
+    IEEE 39, 0.2 & 0.8 & 0.000 & 0.000 & 0.000 & 0.96 & 0.96 & 0.96 & 0.96 \\
+                 & 1.0 & 0.025 & 0.002 & 0.000 & 9.00 & 9.02 & 9.03 & 9.03 \\
+    IEEE 39, 0.4 & 0.8 & 0.000 & 0.000 & 0.000 & 0.34 & 0.34 & 0.34 & 0.34 \\
+                 & 1.0 & 0.066 & 0.004 & 0.000 & 14.87 & 14.93 & 14.93 & 14.93 \\
+    RTS-24, 0.2  & 0.8 & 0.013 & 0.001 & 0.000 & 0.68 & 0.69 & 0.69 & 0.69 \\
+                 & 1.0 & 0.024 & 0.002 & 0.000 & 1.17 & 1.19 & 1.20 & 1.20 \\
+    RTS-24, 0.4  & 0.8 & 0.000 & 0.000 & 0.000 & 1.08 & 1.08 & 1.08 & 1.08 \\
+                 & 1.0 & 0.000 & 0.000 & 0.000 & 1.92 & 1.92 & 1.92 & 1.92 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Variable domains and additional constraints}
+\label{s:domains}
+
+\begin{align}
+  0 &\le p^{\mathrm{d},t}_i \le P^{\mathrm{sch}}_i , \quad
+  0 \le p^{\mathrm{c},t}_i \le P^{\mathrm{sch}}_i , \quad
+  0 \le c_i^t \le e_i^t , \nonumber \\
+  0 &\le Q_i^t, \; \tilde{Q}_i^t, \; R_i^t \le S_i , \quad
+  0 \le H_i^t \le I^{\mathrm{s}} S_i , \quad
+  0 \le a_i^t \le 1 , \nonumber \\
+  \underline{\sigma}^{\mathrm{e}} &\le \sigma_i^t \le \bar{\sigma} , \quad
+  \underline{P}_g \le p^{\mathrm{g},t}_g \le \bar{P}_g , \quad
+  0 \le r^{\mathrm{g},t}_g \le \bar{R}_g , \quad
+  p^{\mathrm{g},t}_g + r^{\mathrm{g},t}_g \le \bar{P}_g .
+  \label{eq:domains}
+\end{align}
+The synchronous lower bound is the minimum stable output, because
+Eq.~(11) counts the stored energy of every committed machine. Under the
+uniform derating, $Q_i^t \le \kappa S_i$ replaces $Q_i^t \le S_i$. Reactive
+output is non-negative; allowing absorption as a separately priced column
+leaves every reported cost, price and voltage unchanged and is never used,
+because every zonal reactive requirement binds. The linear relaxation of the
+store is tight: $\min(p^{\mathrm{d},t}_i, p^{\mathrm{c},t}_i) = 0$ for every
+converter and period in every reported schedule.
+
+\section{Prices as directional derivatives}
+\label{s:duals}
+
+For all \num{1648} requirement rows of the eight configurations (energy
+balance, reserve, zonal reactive and per-outage inertia rows), the cleared
+cost was re-evaluated at $\pm\SI{1}{\MW}$ of the right-hand side. Every
+reported multiplier lies between the two one-sided differences, as a
+subgradient must. The \num{64} inertia rows are degenerate (the two
+differences differ), so a single row's multiplier is not unique. The
+aggregate inertia price of Section~3.2, obtained by moving all inertia rows
+of a period together, has coinciding left and right differences at steps of
+\SIlist{1;0.25;0.01}{\MW} in every configuration and dispatch level
+(Table~\ref{tab:brackets}), so the reported inertia prices and their ratios
+are unique.
+
+\begin{table}[h]
+  \caption{Aggregate inertia price (\$/MW/h): reported value and one-sided
+  differences at three perturbation sizes (identical at all three).}
+  \label{tab:brackets}
+  \centering
+  \begin{tabular}{ll rrr rrr}
+    \toprule
+    & & \multicolumn{3}{c}{Active-power bound} & \multicolumn{3}{c}{Capability set} \\
+    \cmidrule(lr){3-5}\cmidrule(l){6-8}
+    System, share & $e$ & reported & left & right & reported & left & right \\
+    \midrule
+    IEEE 39, 0.2 & 0.8 & 8.00 & 8.00 & 8.00 & 3.00 & 3.00 & 3.00 \\
+                 & 1.0 & 41.00 & 41.00 & 41.00 & 3.00 & 3.00 & 3.00 \\
+    IEEE 39, 0.4 & 0.8 & 8.00 & 8.00 & 8.00 & 3.00 & 3.00 & 3.00 \\
+                 & 1.0 & 41.00 & 41.00 & 41.00 & 3.00 & 3.00 & 3.00 \\
+    RTS-24, 0.2  & 0.8 & 8.00 & 8.00 & 8.00 & 3.003 & 3.003 & 3.003 \\
+                 & 1.0 & 41.00 & 41.00 & 41.00 & 3.00 & 3.00 & 3.00 \\
+    RTS-24, 0.4  & 0.8 & 6.75 & 6.75 & 6.75 & 3.00 & 3.00 & 3.00 \\
+                 & 1.0 & 23.25 & 23.25 & 23.25 & 3.00 & 3.00 & 3.00 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Reduction test}
+\label{s:reduction}
+
+With $I^{\mathrm{s}} = I^{\mathrm{c}}$, no reactive requirement,
+$V = \SI{1.0}{\pu}$ and $m = 192$, the capability set and the active-power
+bound with $\bar{P} = S$ return the same inertia prices and costs within
+\SI{0.0023}{\percent} (Table~\ref{tab:reduction}); the 192-gon can impose up
+to \SI{0.027}{\percent} on the active coordinate.
+
+\begin{table}[h]
+  \caption{Reduction test.}
+  \label{tab:reduction}
+  \centering
+  \begin{tabular}{l rr rr r}
+    \toprule
+    System, share & Price, bound & Price, set & Cost, bound & Cost, set & Gap (\%) \\
+    \midrule
+    IEEE 39, 0.2 & 8.00 & 8.00 & 3383389 & 3383418 & 0.0008 \\
+    IEEE 39, 0.4 & 8.00 & 8.00 & 2441213 & 2441264 & 0.0021 \\
+    RTS-24, 0.2  & 8.00 & 8.00 & 1495550 & 1495563 & 0.0009 \\
+    RTS-24, 0.4  & 6.75 & 6.75 & 867606 & 867626 & 0.0023 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Full sensitivity table and scale check}
+\label{s:sensitivity}
+
+Table~\ref{tab:sensfull} lists every one-at-a-time sensitivity.
+Table~\ref{tab:s118} gives the IEEE 118-bus check discussed in
+Section~5.3: converters at $P/S = 0.95$, dc approximation, as-shipped case.
+
+\begin{table}[h]
+  \caption{$\delta$ (\%) against the active-power bound, one parameter varied
+  at a time ($e = \SI{0.8}{\pu}$, $I^{\mathrm{s}} = \SI{1.5}{\pu}$,
+  $\bar{P} = S$; base case in bold).}
+  \label{tab:sensfull}
+  \centering
+  \small
+  \begin{tabular}{l r rr rr @{\hspace{2em}} l r rr rr}
+    \toprule
+    & & \multicolumn{2}{c}{IEEE 39} & \multicolumn{2}{c}{RTS-24}
+    & & & \multicolumn{2}{c}{IEEE 39} & \multicolumn{2}{c}{RTS-24} \\
+    \cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){9-10}\cmidrule(l){11-12}
+    Quantity & Value & 0.2 & 0.4 & 0.2 & 0.4
+    & Quantity & Value & 0.2 & 0.4 & 0.2 & 0.4 \\
+    \midrule
+    \multirow{4}{*}{RoCoF (Hz/s)}
+      & 0.5 & 8.51 & 1.81 & 6.77 & 4.99
+      & \multirow{5}{*}{$V$ offset}
+      & $-0.05$ & 0.96 & 0.34 & 0.39 & 1.08 \\
+      & \textbf{1} & \textbf{0.96} & \textbf{0.34} & \textbf{0.68} & \textbf{1.08}
+      & & $-0.02$ & 0.96 & 0.34 & 0.59 & 1.08 \\
+      & 1.5 & 0.00 & 0.00 & 0.16 & 0.00
+      & & \textbf{0} & \textbf{0.96} & \textbf{0.34} & \textbf{0.68} & \textbf{1.08} \\
+      & 2 & 0.00 & 0.00 & 0.16 & 0.00
+      & & $+0.02$ & 0.96 & 0.34 & 0.73 & 1.08 \\
+    \multirow{3}{*}{$\mathcal{H}_g$ (s)}
+      & 3 & 4.62 & 0.91 & 2.63 & 2.08
+      & & $+0.05$ & 0.96 & 0.34 & 0.74 & 1.08 \\
+      & \textbf{4} & \textbf{0.96} & \textbf{0.34} & \textbf{0.68} & \textbf{1.08}
+      & \multirow{5}{*}{Offer ratio}
+      & 0.25 & 0.24 & 0.09 & 0.17 & 0.28 \\
+      & 6 & 0.00 & 0.00 & 0.16 & 0.00
+      & & 0.5 & 0.48 & 0.17 & 0.34 & 0.55 \\
+    \multirow{4}{*}{Storage (h)}
+      & 1 & 2.52 & 1.19 & 0.71 & 1.21
+      & & \textbf{1} & \textbf{0.96} & \textbf{0.34} & \textbf{0.68} & \textbf{1.08} \\
+      & 2 & 1.80 & 0.89 & 0.71 & 1.28
+      & & 2 & 1.86 & 0.65 & 1.36 & 2.08 \\
+      & \textbf{4} & \textbf{0.96} & \textbf{0.34} & \textbf{0.68} & \textbf{1.08}
+      & & 4 & 3.53 & 1.22 & 2.62 & 3.83 \\
+      & 8 & 0.56 & 0.00 & 0.50 & 0.57
+      & \multirow{4}{*}{Cycling (\$/MWh)}
+      & \textbf{0} & \textbf{0.96} & \textbf{0.34} & \textbf{0.68} & \textbf{1.08} \\
+    \multirow{7}{*}{Faces $m$}
+      & 8 & 0.96 & 0.34 & 0.27 & 1.08
+      & & 1 & 0.95 & 0.34 & 0.69 & 1.08 \\
+      & 12 & 0.96 & 0.34 & 0.55 & 1.08
+      & & 2 & 0.95 & 0.33 & 0.69 & 1.07 \\
+      & \textbf{24} & \textbf{0.96} & \textbf{0.34} & \textbf{0.68} & \textbf{1.08}
+      & & 5 & 0.95 & 0.33 & 0.68 & 0.99 \\
+      & 48 & 0.96 & 0.34 & 0.69 & 1.08
+      & \multirow{4}{*}{$P/S$}
+      & 1.00 & 1.02 & 0.53 & 0.62 & 5.44 \\
+      & 96 & 0.96 & 0.34 & 0.69 & 1.08
+      & & 0.95 & 0.98 & 0.41 & 0.67 & 2.67 \\
+      & 192 & 0.96 & 0.34 & 0.69 & 1.08
+      & & 0.90 & 0.93 & 0.26 & 0.56 & 1.07 \\
+      & 384 & 0.96 & 0.34 & 0.69 & 1.08
+      & & 0.85 & 0.87 & 0.07 & 0.27 & 0.28 \\
+    \multirow{4}{*}{Overlap $\chi$}
+      & 0 & 0.96 & 0.34 & 0.68 & 1.08
+      & \multicolumn{2}{l}{$\bar{P} = P^{\mathrm{sch}}$} & 3.67 & 1.90 & 1.40 & 7.94 \\
+      & 0.25 & 0.96 & 0.34 & 0.68 & 1.08 & & & & & & \\
+      & 0.5 & 0.96 & 0.34 & 0.68 & 1.08 & & & & & & \\
+      & \textbf{1} & \textbf{0.96} & \textbf{0.34} & \textbf{0.68} & \textbf{1.08} & & & & & & \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[h]
+  \caption{IEEE 118-bus check ($P/S = 0.95$, dc approximation).}
+  \label{tab:s118}
+  \centering
+  \begin{tabular}{rrr rr rr}
+    \toprule
+    Share & RoCoF (Hz/s) & $e$ (pu) & $\delta$ (\%) & Price, bound & Price, set & Binding \\
+    \midrule
+    0.2 & 1.0 & 0.8 & 0.00 & 0.00 & 0.00 & no \\
+    0.2 & 1.0 & 1.0 & $-0.68$ & 0.00 & 0.00 & no \\
+    0.2 & 0.5 & 0.8 & 0.00 & 0.00 & 0.00 & no \\
+    0.2 & 0.5 & 1.0 & $-0.68$ & 0.00 & 0.00 & no \\
+    0.4 & 1.0 & 0.8 & 0.00 & 0.00 & 0.00 & no \\
+    0.4 & 1.0 & 1.0 & $-0.68$ & 0.00 & 0.00 & no \\
+    0.4 & 0.5 & 0.8 & 0.00 & 3.00 & 3.00 & yes \\
+    0.4 & 0.5 & 1.0 & $+0.12$ & 8.00 & 3.00 & yes \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Post-contingency deliverability: pre-correction screen}
+\label{s:screen}
+
+Table~\ref{tab:screen} gives the post-contingency screen of the lossless
+schedules against the continuous branch ratings for every generator and
+converter outage, before Eq.~(20) is imposed. The pre-contingency loading is
+at rating in every configuration because the clearing binds a branch
+constraint, so most outages overload some branch; the secured formulation of
+Section~3.4 removes this for the secured set (Table~7 of the main text).
+``Short'' counts outages whose loss exceeds the fleet holding, which the
+secured formulation covers by inertial pickup of the surviving machines.
+
+\begin{table}[h]
+  \caption{Post-contingency screen of the lossless schedules against
+  continuous ratings (all outages).}
+  \label{tab:screen}
+  \centering
+  \begin{tabular}{ll rrr r}
+    \toprule
+    System, share & Model & Outages & Over rating & Worst (\%) & Short \\
+    \midrule
+    IEEE 39, 0.2 & bound & 72 & 64 & 158.1 & 14 \\
+    IEEE 39, 0.2 & set & 70 & 64 & 161.2 & 16 \\
+    IEEE 39, 0.4 & bound & 73 & 54 & 152.6 & 1 \\
+    IEEE 39, 0.4 & set & 70 & 62 & 153.6 & 0 \\
+    RTS-24, 0.2 & bound & 224 & 200 & 121.2 & 3 \\
+    RTS-24, 0.2 & set & 251 & 142 & 105.1 & 1 \\
+    RTS-24, 0.4 & bound & 221 & 177 & 132.1 & 1 \\
+    RTS-24, 0.4 & set & 221 & 177 & 138.1 & 0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{RMS converter model}
+\label{s:rms}
+
+\emph{States.} Angle $\delta$ of the internal source against the Th\'evenin
+source, per-unit angular frequency $\omega$ of the virtual rotor, internal
+source magnitude $E$.
+
+\emph{Network (algebraic).} With $\bar{E} = E e^{j\delta}$, filter reactance
+$x^{\mathrm{f}}$ and reactance $x^{\mathrm{g}}$ to a source of magnitude
+$V^{\mathrm{g}}(t)$ at angle zero,
+\begin{equation}
+  \bar{I} = \frac{\bar{E} - V^{\mathrm{g}}}{j\,(x^{\mathrm{f}} + x^{\mathrm{g}})},
+  \qquad \bar{V} = \bar{E} - j x^{\mathrm{f}} \bar{I},
+  \qquad P + jQ = \bar{V}\bar{I}^{*} ,
+\end{equation}
+with axis currents $i_{\mathrm{d}} = P/|\bar{V}|$ and
+$i_{\mathrm{q}} = Q/|\bar{V}|$.
+
+\emph{Limiter.} The available magnitude is $I^{\mathrm{c}}$ outside the
+short-term band and $I^{\mathrm{s}}$ inside it (the band opens at the event
+and lasts $T^{\mathrm{b}}$). When $\lVert(i_{\mathrm{d}},
+i_{\mathrm{q}})\rVert > I^{\lim}$ the priority axis is clipped to $I^{\lim}$
+and the other axis receives $\sqrt{(I^{\lim})^2 - i^2_{\mathrm{kept}}}$. The
+delivered powers are $P^{\mathrm{out}} = i^{\lim}_{\mathrm{d}}|\bar{V}|$ and
+$Q^{\mathrm{out}} = i^{\lim}_{\mathrm{q}}|\bar{V}|$.
+
+\emph{Dynamics.} With grid frequency $\omega^{\mathrm{g}}(t)$ falling at the
+design RoCoF for the containment window,
+\begin{align}
+  \dot{\delta} &= \omega_{\mathrm{base}} (\omega - \omega^{\mathrm{g}}(t)), \\
+  2 H^{\mathrm{v}} \dot{\omega} &= P^{\mathrm{ref}}(t) - P^{\mathrm{out}}
+    - D (\omega - \omega^{\mathrm{g}}(t)), \\
+  \dot{E} &= K^{\mathrm{q}} (Q^{\mathrm{tgt}} - Q^{\mathrm{out}}),
+\end{align}
+where $P^{\mathrm{ref}}$ is $P$ before the event and $P + \chi R$ after it,
+$H^{\mathrm{v}} = H f_0 / (2\,\mathrm{RoCoF})$ so that the scheduled $H$ is
+requested at the design RoCoF, and $Q^{\mathrm{tgt}}$ is the scheduled $Q$
+(or $Q + (V^{\mathrm{pre}} - |\bar{V}|)/k^{\mathrm{v}}$ in the droop
+variant).
+
+\emph{Anti-windup.} The angle is held at
+$\delta^{\max}(t) = \arccos\{[E^2 + (V^{\mathrm{g}})^2 - ((x^{\mathrm{f}} +
+x^{\mathrm{g}}) I^{\lim})^2] / (2 E V^{\mathrm{g}})\}$ when the limit binds,
+with $\dot{\omega} \le 0$ there, and $\dot{E} \le 0$ while the current is
+saturated.
+
+\emph{Initialisation and numerics.} The terminal voltage is held at the
+scheduled value and the sources follow; fixed-step fourth-order Runge--Kutta
+with a step of \SI{e-4}{\second}. Parameters: $f_0 = \SI{60}{\hertz}$,
+$x^{\mathrm{f}} = \SI{0.05}{\pu}$, $D = 20$, $K^{\mathrm{q}} =
+\SI{20}{\per\second}$, $k^{\mathrm{v}} = \SI{0.04}{\pu}$, event at
+\SI{0.5}{\second}, containment window and band \SI{1}{\second},
+$I^{\mathrm{c}} = \SI{1.0}{\pu}$, $\chi = 1$, $P = 0.60$, $R = 0.10$ (pu of
+rating). The model is one converter against a Th\'evenin source, without
+inner loops, dc-link dynamics, phase-locked loop, fault current or
+protection; it does not replace an electromagnetic-transient study.
+
+\clearpage
+\section{Crossing values of the Proposition}
+\label{s:critical}
+
+Table~\ref{tab:critical} lists the crossing $\tilde{Q}^{\mathrm{crit}}$ of the
+Proposition (Section~2.5) that Fig.~3 of the main text shows as a map, for
+$\bar{P} = S$ and full band availability.
+
+\begin{table}[h]
+  \caption{Crossing $\tilde{Q}^{\mathrm{crit}}$ (pu of rating) at
+  $\bar{P} = S$ and full band availability. A dash indicates
+  $L \le \bar{P}$.}
+  \label{tab:critical}
+  \centering
+  \begin{tabular}{@{}l rrrrr@{}}
+    \toprule
+    & \multicolumn{5}{c}{$I^{\mathrm{s}}$ (pu)} \\
+    \cmidrule(l){2-6}
+    $V$ (pu) & 1.00 & 1.10 & 1.20 & 1.35 & 1.50 \\
+    \midrule
+    0.95 & --- & 0.303 & 0.547 & 0.803 & 1.015 \\
+    0.98 & --- & 0.403 & 0.619 & 0.866 & 1.077 \\
+    1.00 & --- & 0.458 & 0.663 & 0.907 & 1.118 \\
+    1.02 & 0.201 & 0.509 & 0.706 & 0.947 & 1.158 \\
+    1.05 & 0.320 & 0.578 & 0.767 & 1.005 & 1.217 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Source-case corrections and parameters}
+\label{s:setup}
+
+Table~\ref{tab:repair} lists the voltage controls moved to bring the two
+source cases within their declared voltage limits (Section~4.1); active power
+is not redispatched. Table~\ref{tab:parameters} lists the parameters of the
+case study (Section~4.2).
+
+\begin{table}[h]
+  \caption{Voltage controls adjusted to bring the source cases within their
+  declared voltage limits.}
+  \label{tab:repair}
+  \centering
+  \begin{tabular}{@{}llrrr@{}}
+    \toprule
+    System & Control & Bus & Before & After \\
+    \midrule
+    IEEE 39 & generator setpoint (pu) & 35 & 1.0636 & 1.0586 \\
+    RTS-24 & generator setpoint (pu) & 13 & 0.9800 & 0.9950 \\
+    RTS-24 & generator setpoint (pu) & 14 & 1.0140 & 1.0240 \\
+    RTS-24 & generator setpoint (pu) & 17 & 1.0500 & 1.0450 \\
+    RTS-24 & generator setpoint (pu) & 20 & 1.0500 & 1.0400 \\
+    RTS-24 & generator setpoint (pu) & 22 & 1.0500 & 1.0550 \\
+    RTS-24 & transformer tap position & 23 & 1 & $-1$ \\
+    RTS-24 & transformer tap position & 10 & 1, 1 & $-2$, $-1$ \\
+    RTS-24 & transformer tap position & 11 & 1, 1 & 2, 3 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[h]
+  \caption{Parameters (offers in \$/MWh for energy and cycling, \$/MW/h for
+  availability, \$/MVAr/h for reactive power).}
+  \label{tab:parameters}
+  \centering
+  \begin{tabular}{@{}l l@{}}
+    \toprule
+    Quantity & Value \\
+    \midrule
+    Periods $T$, length $\Delta$ & 8, \SI{3}{\hour} \\
+    Reserve requirement $\rho$ & \SI{6}{\percent} of demand \\
+    Reactive requirement $\varphi$ & \SI{35}{\percent} of zonal reactive load \\
+    RoCoF limit $\dot{f}^{\max}$ & \SI{1.0}{\hertz\per\second} \\
+    Synchronous inertia constant $\mathcal{H}_g$ & \SI{4}{\second} \\
+    Current limits $I^{\mathrm{c}}$, $I^{\mathrm{s}}$
+      & \SI{1.0}{\pu}, \SI{1.5}{\pu} \\
+    Reactive priority $\alpha_i$, overlap $\chi$ & \num{1.0}, \num{1.0} \\
+    Storage duration, initial $\sigma$ & \SI{4}{\hour}, \num{0.60} \\
+    Efficiencies $\eta_{\mathrm{c}}, \eta_{\mathrm{d}}$ & \num{0.95}, \num{0.95} \\
+    $\underline{\sigma}^{\mathrm{e}}$, $\sigma^{\star}$, $\bar{\sigma}$
+      & \num{0.05}, \num{0.20}, \num{0.95} \\
+    Delivery windows $\tau^{\mathrm{R}}, \tau^{\mathrm{H}}$
+      & \SI{30}{\minute}, \SI{2}{\second} \\
+    Polygon faces $m$ & 24 \\
+    Converter offers
+      $\kappa^{\mathrm{e}}, \kappa^{\mathrm{r}}, \kappa^{\mathrm{h}},
+      \kappa^{\mathrm{q}}$ & 8, 4, 3, 0.01 \\
+    Synchronous offers
+      $\kappa^{\mathrm{ge}}, \kappa^{\mathrm{gr}}$ & 38, 9 \\
+    Available converter injection $e_i$ & \SI{0.8}{\pu} of $S_i$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\end{document}
