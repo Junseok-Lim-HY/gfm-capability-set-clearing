@@ -374,7 +374,7 @@ balance and the reserve, inertia and zonal reactive requirements are
       \textstyle\sum_{g} \mathcal{H}_g S_g
     \quad \forall\, \omega \in \mathcal{I} , \label{eq:inertia-conv} \\
   \sum_{i \in \mathcal{I}_z} Q_i^t &\;\ge\; \varphi \, Q^{z,t}
-    \quad \forall\, z \in \mathcal{Z} .
+    \quad \forall\, z \in \mathcal{Z}_{\mathcal{I}} .
   \label{eq:reactive}
 \end{align}
 %
@@ -384,7 +384,10 @@ inertia requirement is written once per credible outage $\omega$, and the
 contribution of the tripped resource is removed from the side on which it
 appears. The loss $P^{\mathrm{loss}}_\omega$ is the scheduled active bound of
 the unit for both fleets, so the clearing cannot reduce its own contingency
-by de-loading the unit that sets it. Commitment is fixed.
+by de-loading the unit that sets it. The reactive requirement is written
+for the zones $\mathcal{Z}_{\mathcal{I}} \subseteq \mathcal{Z}$ that
+contain a converter; the reactive load of the other zones is served by plant
+outside the clearing. Commitment is fixed.
 
 The store follows
 %

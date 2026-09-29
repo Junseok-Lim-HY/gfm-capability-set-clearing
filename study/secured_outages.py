@@ -112,7 +112,7 @@ def screen(case, model, outcome, only=None) -> dict:
     return dict(checked=checked, over=over, short=short, worst=worst)
 
 
-def solve_secured(case, settings, form, order, rounds: int = 14, start=None):
+def solve_secured(case, settings, form, order, rounds: int = 40, start=None):
     """Iterate the deployed fraction until it stops moving."""
     fraction = (np.ones((len(case.demand_mw), len(order)))
                 if start is None else start)

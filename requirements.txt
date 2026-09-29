@@ -9,3 +9,4 @@ pandapower>=3.5.4
 pandas>=2.3.3
 scipy>=1.18.0
 cvxpy>=1.9.2
+pymupdf>=1.26   # check_r2_numbers_v2.py only

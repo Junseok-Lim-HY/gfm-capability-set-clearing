@@ -44,6 +44,7 @@ STEPS = [
     ("manuscript/figures/fig_placement_sensitivity.py", False, "Figs. 7 and 8"),
     ("manuscript/figures/fig1_overview_r2.py", False, "Fig. 1"),
     ("study/check_r2_numbers.py", True, "headline numbers of the manuscript against the csv files"),
+    ("study/audit_reruns_260929.py", False, "audit re-runs: repair effect, corrected event voltage, secured fraction to 1e-3"),
 ]
 
 

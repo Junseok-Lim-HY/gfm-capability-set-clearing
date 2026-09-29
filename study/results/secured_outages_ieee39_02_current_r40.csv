@@ -1,0 +1,2 @@
+case,share,form,secured_units,fraction_rounds,fraction_move,cost_plain,cost_secured,cost_increase_pct,price_inertia_plain,price_inertia_secured,price_reserve_plain,price_reserve_secured,screen_over_secured,screen_worst_secured,screen_checked,seconds
+ieee39,0.2,current,7,18,0.0007626688250050861,3351102.911801133,3351102.911801134,2.779152413779248e-14,3.0,3.0,4.0,4.0,7,100.02594866194607,50,33.104982137680054

@@ -19,8 +19,8 @@ They are corrected before use by moving one generator setpoint on IEEE 39-bus
 and five setpoints and five transformer taps on RTS-24; active power is
 not redispatched. After the
 correction both cases are within their voltage bands, the largest branch
-loading is \SI{73}{\percent} and \SI{90}{\percent}, and the change in any
-reported cost difference is below \num{0.011} percentage points.
+loading is \SI{77}{\percent} and \SI{90}{\percent}, and the change in any
+reported cost difference is below \num{0.001} percentage points.
 
 Converters replace the smallest units until a target share of installed
 capacity is reached (Table~\ref{tab:systems}); Section~\ref{sec:placement}
@@ -33,8 +33,9 @@ capability commonly required of inverter-based plant at rated active power;
 and $P/S = 0.90$, the stricter requirement, close to a storage inverter sized
 for four-quadrant operation. The reference convention takes
 $S_i = \sqrt{P_{\max,i}^2 + Q_{\max,i}^2}$ from the reactive limits of the
-replaced unit, which gives $P/S$ between \num{0.857} and \num{0.952} (mean
-\num{0.921}), inside the range of the other three. Cost and price results
+replaced unit, which gives $P/S$ between \num{0.857} and \num{0.952}
+(\numrange{0.909}{0.929} on average by configuration), inside the range of
+the other three. Cost and price results
 are reported for all four conventions and for both comparison bounds
 (Section~\ref{sec:results-cost}). DC-side limits of the converter and the
 store are not modelled; the terminal capability represents deliverability
@@ -77,12 +78,14 @@ simplex through SciPy~\cite{virtanen2020scipy,huangfu2018parallel}.
 The capability set is compared with three models that share all other
 constraints: (i) the active-power bound of Eq.~\eqref{eq:box}; (ii) an
 apparent-power model, $\lVert (P_i + R_i + H_i, Q_i) \rVert_2 \le S_i$,
-without terminal voltage or short-term rating; and (iii) a uniform derating
-of the active-power bound, $P_i + R_i + H_i \le \gamma S_i$ with
-$|Q_i| \le \kappa S_i$, where $\kappa$ is the smallest per-unit reactive
-range that allows every zonal requirement to be met and
-$\gamma = [ (V^{\min} I^{\mathrm{c}})^2 - \kappa^2 ]^{1/2}$, so that the
-continuous current limit holds at every voltage of the day. Differences are
+represented by the same inscribed $m$-gon, without terminal voltage or
+short-term rating; and (iii) a uniform derating of the active-power bound,
+$|P_i + R_i + H_i| \le \gamma^{\mathrm{UD}} S_i$ with
+$|Q_i| \le \kappa^{\mathrm{Q}} S_i$, where $\kappa^{\mathrm{Q}}$ is the
+smallest per-unit reactive range that allows every zonal requirement to be
+met and $\gamma^{\mathrm{UD}} = [ (V^{\min} I^{\mathrm{c}})^2 -
+(\kappa^{\mathrm{Q}})^2 ]^{1/2}$, so that the continuous current limit
+holds at every voltage of the day. Differences are
 reported as
 %
 \begin{equation}
@@ -113,15 +116,17 @@ Fig.~\ref{fig:signs} varies each omitted quantity with the other two removed.
 The short-term rating gives $\delta \ge 0$, up to \SI{+1.1}{\percent}: the
 bound cannot use the overload band. Reactive duty gives $\delta \le 0$, down
 to \SI{-2.6}{\percent}: the bound does not account for reactive current; at a
-requirement of \SI{120}{\percent} of zonal reactive load the capability-set
-clearing is infeasible at \SI{40}{\percent} converter share while the bound
-still clears. Terminal voltage gives a $\delta$ that changes sign at
+requirement of \SI{120}{\percent} of zonal reactive load neither
+representation clears at \SI{40}{\percent} converter share, because the
+requirement exceeds the reactive rating of the converters in the binding
+zone, so that point is absent from Fig.~\ref{fig:signs}c. Terminal voltage gives a $\delta$ that changes sign at
 \SI{1.0}{\pu}, from \SI{-2.7}{\percent} at \SI{0.95}{\pu} to
 \SI{+0.9}{\percent} at \SI{1.05}{\pu}. Each response follows the Proposition:
 a larger $L_i$ raises $\tilde{Q}^{\mathrm{crit}}_i$ and moves $\delta$
 upwards, and a larger $\tilde{Q}_i$ moves it downwards. The signs are the same
 in all four configurations; the magnitudes depend on the system and on how
-heavily the converters are loaded, not on the converter share. Because the
+heavily the converters are loaded, and do not increase monotonically with
+the converter share. Because the
 three responses differ in sign, and the voltage response changes sign inside
 the normal operating band, a constant derating or uplift of
 Eq.~\eqref{eq:box} cannot reproduce the capability set.
@@ -139,10 +144,11 @@ Eq.~\eqref{eq:box} cannot reproduce the capability set.
 \label{sec:results-cost}
 
 Table~\ref{tab:rating} gives $\delta$ for the four rating conventions and the
-two comparison bounds. The sign is positive in all \num{32} cases. The
-magnitude depends on the convention: from \SIrange{0.26}{5.44}{\percent}
-with $\bar{P} = S$ and from \SIrange{0.62}{8.25}{\percent} with
-$\bar{P} = P^{\mathrm{sch}}$. The sign condition and the direction of the
+two comparison bounds. The sign is positive in all \num{28} cells (the two
+bounds coincide at $P/S = 1.00$). The magnitude depends on the convention:
+from \SIrange{0.26}{5.44}{\percent} with $\bar{P} = S$ and from
+\SIrange{0.53}{8.25}{\percent} with $\bar{P} = P^{\mathrm{sch}}$, the
+$P/S = 1.00$ row counting for both. The sign condition and the direction of the
 capability mismatch are therefore properties of the two feasible sets,
 whereas the size of the cost difference is conditional on the rating
 assumption and should be read with it.
@@ -231,7 +237,7 @@ converter reserve than the bound, and from the fourth period between
 \SI{56.5}{\MW} and \SI{110.4}{\MW} more; these are differences between the
 ranges over the two optimal faces, so they hold at every optimum. Under the
 capability set the converter reserve is unique in every period, whereas under
-the bound its range is about \SI{60}{\MW} wide at the peak. The
+the bound its range is \SIrange{53}{60}{\MW} wide from the third period on. The
 state-of-charge trajectories coincide, so the difference is not caused by
 storage use.
 
@@ -257,9 +263,10 @@ loading and positive otherwise. At full dispatch it is
 \SIrange{1.6}{16.7}{\percent} against the apparent-power model and
 \SIrange{0.6}{22.5}{\percent} against the uniform derating. The uniform
 derating keeps every converter within its continuous current, as the
-capability set does; the active-power bound does not, and its schedules reach
-\SI{1.38}{\pu} of continuous current on RTS-24 (Table~\ref{tab:acfinal},
-last column). The
+capability set does; the active-power bound does not, and its lossless
+schedules reach \SI{1.38}{\pu} of continuous current on RTS-24, and
+\SIrange{1.34}{1.40}{\pu} after the ac loop (Table~\ref{tab:acfinal}, last
+column). The
 exact second-order cone formulation gives $\delta$ within \num{0.056}
 percentage points of the polygon value, and the polygon value is the smaller
 in every case, so the reported differences are conservative.
@@ -272,7 +279,9 @@ requirement no longer binds on IEEE 39-bus and the two representations
 coincide. The offer ratio scales $\delta$ almost proportionally without
 changing its sign. The remaining parameters (polygon faces, cycling cost,
 reserve overlap, state-of-charge thresholds, terminal-voltage offset) change
-$\delta$ by less than \num{0.4} percentage points.
+$\delta$ by at most \num{0.4} percentage points (\num{0.41} at $m = 8$ on
+RTS-24, \SI{20}{\percent} share, where the octagon withholds
+\SI{10.8}{\percent} of the active coordinate).
 
 \begin{figure*}[t]
   \centering
@@ -308,7 +317,8 @@ infeasible under both representations: the zonal reactive requirement cannot
 be met with those converter locations. On the IEEE 118-bus system, under the
 dc approximation and with $P/S = 0.95$, the inertia requirement binds only at
 \SI{40}{\percent} share with a RoCoF limit of \SI{0.5}{\hertz\per\second};
-there $\delta = \SI{+0.12}{\percent}$ and the price ratio is \num{2.7}. Where
+there $\delta = \SI{+0.12}{\percent}$ at full dispatch (zero at
+$e = \SI{0.8}{\pu}$) and the price ratio is \num{2.7}. Where
 it does not bind, only the reactive-current omission acts, and $\delta$ is
 zero at $e = \SI{0.8}{\pu}$ and \SI{-0.68}{\percent} at full dispatch, the
 sign of Fig.~\ref{fig:signs}c. The direction of the
@@ -322,7 +332,7 @@ The procedure of Section~\ref{sec:acloop} was applied to the capability set
 and to the active-power bound in all four configurations. All eight final
 schedules satisfy the bus voltage, machine reactive, branch loading and
 balance limits in an ac power flow (Table~\ref{tab:acfinal}), in
-\numrange{5}{13} rounds. The first, lossless clearing leaves \SIrange{32}{76}{\MW}
+\numrange{5}{13} rounds. The first, lossless clearing leaves \SIrange{33}{76}{\MW}
 for the reference machine to supply and loads a branch to at most
 \SI{103.2}{\percent}; in the final schedules the reference machine deviates
 from its cleared output by less than \SI{1}{\MW} and the largest branch
@@ -364,15 +374,19 @@ or below the continuous rating, whereas the schedules of the bound reach
 \subsection{Post-contingency deliverability}
 \label{sec:postcontingency}
 
-Equation~\eqref{eq:secure} was imposed for the synchronous units with the
-largest active limits (five to eight per configuration). Without it, the
+Equation~\eqref{eq:secure} was imposed for the eight synchronous units with
+the largest active limits, or for all of them where fewer are committed (five
+to eight per configuration). Without it, the
 response model of Section~\ref{sec:secure-form} overloads a branch beyond its
 emergency rating in up to \num{29} of \num{47} secured outage--period cases,
 with a worst loading of \SI{129}{\percent}. With it, the worst loading is
-\SIrange{100.0}{100.1}{\percent} in all eight clearings, the cleared cost
+within \SI{0.03}{\percent} of the emergency rating in the six clearings
+whose screen had exceeded it, and unchanged at \SI{97.0}{} and
+\SI{90.1}{\percent} on RTS-24 at \SI{20}{\percent} share, where it had
+not. The cleared cost
 rises by at most \SI{0.06}{\percent}, the inertia and reserve prices are
 unchanged, and $\delta$ is unchanged except on RTS-24 at \SI{40}{\percent}
-share, where it moves from \SI{1.09}{\percent} to \SI{1.14}{\percent}
+share, where it moves from \SI{1.08}{\percent} to \SI{1.14}{\percent}
 (Table~\ref{tab:secured}). The results of Sections~\ref{sec:results-cost}
 and~\ref{sec:ladder} therefore hold when the procured response is required
 to be deliverable after the critical outages. Outages outside the secured set
@@ -392,7 +406,7 @@ are screened but not constrained.
     System, share & Model & $|\Omega|$ & without & with & (\%) \\
     \midrule
     IEEE 39, 0.2 & bound & 7 & 113.9 & 100.0 & 0.00 \\
-    IEEE 39, 0.2 & set & 7 & 129.2 & 100.1 & 0.00 \\
+    IEEE 39, 0.2 & set & 7 & 129.2 & 100.0 & 0.00 \\
     IEEE 39, 0.4 & bound & 5 & 109.2 & 100.0 & 0.00 \\
     IEEE 39, 0.4 & set & 5 & 122.9 & 100.0 & 0.00 \\
     RTS-24, 0.2 & bound & 8 & 97.0 & 97.0 & 0.00 \\
@@ -419,7 +433,10 @@ that the scheduled $H_i$ is requested at the design RoCoF of
 $\tilde{Q}^{\mathrm{crit}}$ (conservative, crossing and optimistic regions of
 the Proposition), $I^{\mathrm{s}} \in \{1.1, 1.5\}$~pu, reactive and active
 priority, $x^{\mathrm{g}} \in \{0.05, 0.15, 0.30\}$~pu, and a grid voltage
-that is either constant or falls by \SI{5}{\percent} at the event.
+that is either constant or falls by \SI{5}{\percent} at the event. At
+$I^{\mathrm{s}} = \SI{1.5}{\pu}$ the crossing exceeds the rating, so only
+the conservative region occurs there; each reactive mode and grid-voltage
+case therefore comprises \num{90} runs.
 
 The limiter becomes active in all runs, \SIrange{0.07}{0.34}{\second} after
 the event, and the converter current does not exceed the limit in force
@@ -457,7 +474,8 @@ with $I_i$ the pre-event current; it reproduces the simulated voltages to
 numerical precision. The reactance $x^{\mathrm{g}}_i$ is obtained from the
 voltage sensitivities of Section~\ref{sec:acloop}. Using
 $V^{\mathrm{sh}}_i$ in Eq.~\eqref{eq:short} lowers the short-term face by up
-to \SI{12.4}{\percent} (IEEE 39-bus, \SI{40}{\percent} share). Re-clearing
+to \SI{13.0}{\percent}, a terminal voltage of \SI{0.88}{\pu} against a
+pre-event \SI{1.01}{\pu} (IEEE 39-bus, \SI{40}{\percent} share). Re-clearing
 with the corrected face leaves the cost and the total scheduled inertial
 power unchanged and reallocates the inertial obligation between converters.
 When the corrected schedules are passed through the converter model, the
@@ -482,7 +500,7 @@ depends on the virtual inertia and damping and not on the capability set.
 		& $\Delta V$ (\%) & $t^{\lim}$ (s) \\
 		\midrule
 		Conservative & 0.05 & 99.5--99.7 & 0.1--0.3 & 0.12--0.17 \\
-		(1.5 pu) & 0.15 & 95.1--97.7 & 0.9--2.3 & 0.17--0.25 \\
+		(1.1, 1.5 pu) & 0.15 & 95.1--97.7 & 0.9--2.3 & 0.17--0.25 \\
 		& 0.30 & 79.9--90.6 & 3.5--9.5 & 0.23--0.34 \\
 		Crossing & 0.05 & 99.6--99.7 & 0.1 & 0.10--0.11 \\
 		(1.1 pu) & 0.15 & 96.8--97.4 & 0.6--0.9 & 0.15--0.17 \\
@@ -523,9 +541,9 @@ the bound cannot be corrected by a constant factor.
 
 On the IEEE 39-bus and RTS-24 systems the capability set was never more
 expensive than the active-power bound, the apparent-power model or a safe
-uniform derating, in \num{32} rating and bound conventions and \num{605}
-randomised placements. The cost difference is about \SI{1}{\percent} at the
-base case, up to \SI{8.5}{\percent} with a tighter RoCoF limit and
+uniform derating, in \num{28} rating and bound combinations and \num{605}
+randomised placements. The cost difference is \SIrange{0.3}{1.1}{\percent} at
+the base case, up to \SI{8.5}{\percent} with a tighter RoCoF limit and
 \SIrange{0.6}{22.5}{\percent} at full converter dispatch; its size depends on
 the rating convention and on the offers. The capability set prices inertial
 power at the converter offer, while the bound prices it

@@ -34,6 +34,9 @@ RMS converter model on the IEEE 39-bus and RTS-24 systems.
     study/                      every script behind a number in the paper; see reproduce.py
       results/                  the csv files the tables and figures are built from
       check_r2_numbers.py       headline numbers of the paper against results/
+      check_r2_numbers_v2.py    full numbers check: recomputes every printed value from the
+                                cost/price columns and compares the PDF text (needs pymupdf)
+      audit_reruns_260929.py    re-runs behind the 2026-09-29 corrections
 
     manuscript/                 LaTeX sources (elsarticle), refs.bib, highlights
       SEGAN_Manuscript_<date>.pdf, SEGAN_Supplementary_<date>.pdf

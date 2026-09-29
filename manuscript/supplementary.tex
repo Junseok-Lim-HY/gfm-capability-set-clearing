@@ -50,10 +50,13 @@ $\underline{\sigma}^{\mathrm{e}} = 0.05$ to the breakpoint
 $\sigma^{\star}$. Table~\ref{tab:gate} gives the cost difference $\delta$
 against the active-power bound when $\sigma^{\star}$ is varied with the floor
 held; at $\sigma^{\star} = \underline{\sigma}^{\mathrm{e}}$ the gate is
-removed. The fleet-mean availability computed from the cleared
-state-of-charge trajectories falls from \num{1.00} to between \num{0.35} and
-\num{0.62} across the range, and $\delta$ changes by less than \num{0.05}
-percentage points. The gate is retained because a formulation crediting the
+removed. The fleet-mean availability, evaluated on the selected
+(least-throughput) optimum from the cleared state-of-charge trajectories,
+falls from \num{1.00} without the gate to \numrange{0.41}{0.71} at the base
+breakpoint and \numrange{0.35}{0.69} at $\sigma^{\star} = 0.30$; being a
+primal quantity on a wide optimal face, it depends on the selected optimum.
+The cost difference $\delta$ changes by less than \num{0.01} percentage
+points across the range. The gate is retained because a formulation crediting the
 short-term current to an empty store would be incorrect, not because it
 carries a result.
 
@@ -72,8 +75,9 @@ carries a result.
       & $\delta$ & avail. & $\delta$ & avail. \\
     \midrule
     0.05 (no gate) & 0.96 & 1.00 & 0.34 & 1.00 & 0.68 & 1.00 & 1.08 & 1.00 \\
-    0.20 (base)    & 0.96 & 1.00 & 0.34 & 1.00 & 0.68 & 1.00 & 1.08 & 1.00 \\
-    0.30           & 0.96 & 0.62 & 0.34 & 0.55 & 0.68 & 0.42 & 1.08 & 0.35 \\
+    0.10           & 0.96 & 0.78 & 0.34 & 0.64 & 0.68 & 0.56 & 1.08 & 0.59 \\
+    0.20 (base)    & 0.96 & 0.71 & 0.34 & 0.54 & 0.68 & 0.41 & 1.08 & 0.47 \\
+    0.30           & 0.96 & 0.69 & 0.34 & 0.51 & 0.68 & 0.35 & 1.08 & 0.43 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -152,8 +156,12 @@ differences are conservative.
   \label{eq:domains}
 \end{align}
 The synchronous lower bound is the minimum stable output, because
-Eq.~(11) counts the stored energy of every committed machine. Under the
-uniform derating, $Q_i^t \le \kappa S_i$ replaces $Q_i^t \le S_i$. Reactive
+Eq.~(16) counts the stored energy of every committed machine. The upper bound
+$I^{\mathrm{s}} S_i$ on $H_i^t$ applies to the capability set; under the
+comparison models of Section~4.2 it is $S_i$ (active-power bound,
+apparent-power model) and $\gamma^{\mathrm{UD}} S_i$ (uniform derating),
+where it is never active. Under the uniform derating,
+$Q_i^t \le \kappa^{\mathrm{Q}} S_i$ replaces $Q_i^t \le S_i$. Reactive
 output is non-negative; allowing absorption as a separately priced column
 leaves every reported cost, price and voltage unchanged and is never used,
 because every zonal reactive requirement binds. The linear relaxation of the
@@ -324,7 +332,7 @@ Section~5.3: converters at $P/S = 0.95$, dc approximation, as-shipped case.
 
 Table~\ref{tab:screen} gives the post-contingency screen of the lossless
 schedules against the continuous branch ratings for every generator and
-converter outage, before Eq.~(20) is imposed. The pre-contingency loading is
+converter outage, before Eq.~(21) is imposed. The pre-contingency loading is
 at rating in every configuration because the clearing binds a branch
 constraint, so most outages overload some branch; the secured formulation of
 Section~3.4 removes this for the secured set (Table~7 of the main text).
@@ -355,11 +363,12 @@ secured formulation covers by inertial pickup of the surviving machines.
 \section{RMS converter model}
 \label{s:rms}
 
-\emph{States.} Angle $\delta$ of the internal source against the Th\'evenin
+\emph{States.} Angle $\vartheta$ of the internal source against the Th\'evenin
 source, per-unit angular frequency $\omega$ of the virtual rotor, internal
-source magnitude $E$.
+source magnitude $E^{\mathrm{v}}$ (the symbols $\delta$ and $E_i$ of the main
+text are not used in this section).
 
-\emph{Network (algebraic).} With $\bar{E} = E e^{j\delta}$, filter reactance
+\emph{Network (algebraic).} With $\bar{E} = E^{\mathrm{v}} e^{j\vartheta}$, filter reactance
 $x^{\mathrm{f}}$ and reactance $x^{\mathrm{g}}$ to a source of magnitude
 $V^{\mathrm{g}}(t)$ at angle zero,
 \begin{equation}
@@ -381,10 +390,10 @@ $Q^{\mathrm{out}} = i^{\lim}_{\mathrm{q}}|\bar{V}|$.
 \emph{Dynamics.} With grid frequency $\omega^{\mathrm{g}}(t)$ falling at the
 design RoCoF for the containment window,
 \begin{align}
-  \dot{\delta} &= \omega_{\mathrm{base}} (\omega - \omega^{\mathrm{g}}(t)), \\
+  \dot{\vartheta} &= \omega_{\mathrm{base}} (\omega - \omega^{\mathrm{g}}(t)), \\
   2 H^{\mathrm{v}} \dot{\omega} &= P^{\mathrm{ref}}(t) - P^{\mathrm{out}}
     - D (\omega - \omega^{\mathrm{g}}(t)), \\
-  \dot{E} &= K^{\mathrm{q}} (Q^{\mathrm{tgt}} - Q^{\mathrm{out}}),
+  \dot{E}^{\mathrm{v}} &= K^{\mathrm{q}} (Q^{\mathrm{tgt}} - Q^{\mathrm{out}}),
 \end{align}
 where $P^{\mathrm{ref}}$ is $P$ before the event and $P + \chi R$ after it,
 $H^{\mathrm{v}} = H f_0 / (2\,\mathrm{RoCoF})$ so that the scheduled $H$ is
@@ -392,11 +401,14 @@ requested at the design RoCoF, and $Q^{\mathrm{tgt}}$ is the scheduled $Q$
 (or $Q + (V^{\mathrm{pre}} - |\bar{V}|)/k^{\mathrm{v}}$ in the droop
 variant).
 
-\emph{Anti-windup.} The angle is held at
-$\delta^{\max}(t) = \arccos\{[E^2 + (V^{\mathrm{g}})^2 - ((x^{\mathrm{f}} +
-x^{\mathrm{g}}) I^{\lim})^2] / (2 E V^{\mathrm{g}})\}$ when the limit binds,
-with $\dot{\omega} \le 0$ there, and $\dot{E} \le 0$ while the current is
-saturated.
+\emph{Anti-windup.} When the limit binds the angle is held at
+\begin{equation}
+  \vartheta^{\max}(t) = \arccos\frac{(E^{\mathrm{v}})^2 + (V^{\mathrm{g}})^2
+    - \bigl[(x^{\mathrm{f}} + x^{\mathrm{g}}) I^{\lim}\bigr]^2}
+    {2 E^{\mathrm{v}} V^{\mathrm{g}}} ,
+\end{equation}
+with $\dot{\omega} \le 0$ there, and $\dot{E}^{\mathrm{v}} \le 0$ while the
+current is saturated.
 
 \emph{Initialisation and numerics.} The terminal voltage is held at the
 scheduled value and the sources follow; fixed-step fourth-order Runge--Kutta
@@ -404,8 +416,8 @@ with a step of \SI{e-4}{\second}. Parameters: $f_0 = \SI{60}{\hertz}$,
 $x^{\mathrm{f}} = \SI{0.05}{\pu}$, $D = 20$, $K^{\mathrm{q}} =
 \SI{20}{\per\second}$, $k^{\mathrm{v}} = \SI{0.04}{\pu}$, event at
 \SI{0.5}{\second}, containment window and band \SI{1}{\second},
-$I^{\mathrm{c}} = \SI{1.0}{\pu}$, $\chi = 1$, $P = 0.60$, $R = 0.10$ (pu of
-rating). The model is one converter against a Th\'evenin source, without
+$I^{\mathrm{c}} = \SI{1.0}{\pu}$, $\chi = 1$, $P = 0.60$, $R = 0.10$, low and
+high reactive schedules $Q = 0.20$ and $0.60$ (pu of rating). The model is one converter against a Th\'evenin source, without
 inner loops, dc-link dynamics, phase-locked loop, fault current or
 protection; it does not replace an electromagnetic-transient study.
 
@@ -497,6 +509,9 @@ case study (Section~4.2).
       \kappa^{\mathrm{q}}$ & 8, 4, 3, 0.01 \\
     Synchronous offers
       $\kappa^{\mathrm{ge}}, \kappa^{\mathrm{gr}}$ & 38, 9 \\
+    Synchronous reserve limit $\bar{R}_g$, minimum output
+      $\underline{P}_g$ & $0.15\,\bar{P}_g$, case data \\
+    Tie-break cost slack (Section~3.3, step 1) & \num{e-9} (relative) \\
     Available converter injection $e_i$ & \SI{0.8}{\pu} of $S_i$ \\
     \bottomrule
   \end{tabular}
