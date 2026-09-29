@@ -3,5 +3,5 @@ Highlights
 - Current-limited capability set replaces the active-power bound in joint clearing.
 - A piecewise condition gives the sign of the active-power bound's error.
 - Final schedules pass ac power-flow limits; prices remain linear-programme duals.
-- Capability set never costs more across 32 rating and bound conventions.
+- Capability set never costs more across 28 rating and bound combinations.
 - Active-power bound prices inertia 2.3 to 13.7 times higher than the capability set.
