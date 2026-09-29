@@ -47,11 +47,11 @@ current for \SI{2}{\second}, and reports that the active headroom of an
 inverter depends on its pre-disturbance operating
 point~\cite{aemo2023gfm,aemo2024inertia}; MISO's draft specification addresses
 operation at short-duration current limits~\cite{miso2024gfm}. At device and
-feeder level the interaction between reactive support and active reserve
-through the apparent-power limit is
-established~\cite{energies2020reserve}, and current-based inverter limits
-have been used in photovoltaic--storage scheduling and in batteries providing
-frequency and voltage control
+feeder level, reactive support has been shown to erode the active reserve
+available for fast frequency response, through the inverter losses at the
+operating point on its capability curve~\cite{energies2020reserve}, and
+current-based inverter limits have been used in photovoltaic--storage
+scheduling and in batteries providing frequency and voltage control
 together~\cite{polat2025inverter,zecchino2021concurrent}. The remaining gap is
 a market clearing in which the current limit is shared between energy, reserve
 and inertia, the requirement multipliers are prices, and the effect of the
@@ -72,7 +72,7 @@ representation is quantified.
     & $\neq$ continuous & state & as duals & model \\
     \midrule
     Park et al.~\cite{park2026inertia} & IEEE 30
-      & \yes & \no & \no & \no & \no & \yes & \yes & --- \\
+      & \yes & \no & \no & \no & \no & \yes & \yes & Analytic nadir \\
     Jiang and Li~\cite{jiang2025frequency} & WSCC 9, IEEE 39
       & \yes & \no & \no & \no & \no & \no & \no & EMT surrogate \\
     Jiang and Li~\cite{jiang2026learning} & IEEE 9
@@ -80,7 +80,7 @@ representation is quantified.
     Beigi Fard et al.~\cite{beigifard2026frequency} & IEEE 9, 118
       & \yes & \no & \no & \no & \no & \yes & \no & PWL nadir \\
     Garozzo and Tina~\cite{energies2020reserve} & inverter, LV feeder
-      & --- & \yes & \yes & \no & \no & \yes & --- & --- \\
+      & --- & \no & \yes & \no & \no & \yes & --- & --- \\
     \addlinespace
     This work & IEEE 39, RTS-24
       & \yes & \yes & \yes & \yes & \yes & \yes & \yes & RMS check \\
