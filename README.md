@@ -6,9 +6,10 @@ Code, data and manuscript sources for
 > converters in reserve and inertia scheduling: formulation, sign condition and
 > validation", submitted to *Sustainable Energy, Grids and Networks* (Elsevier).
 
-**Status: under review.** The repository is private while the manuscript is
-under review. On acceptance it will be made public and an archived release
-with a DOI will be added here and in the paper's Data availability statement.
+**Status: under review.** The manuscript is under review at the journal; the
+repository is public so that reviewers and readers can inspect the code and
+data behind every table and figure. On acceptance an archived release with a
+DOI will be added here and in the paper's Data availability statement.
 
 ## What is here
 
